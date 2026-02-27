@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b3d2e" />
+  <title>Moscheen im Bau – Prototype</title>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+      --accent: #2ee59d;
+      --danger: #ff6b6b;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius2: 14px;
+      --gap: 14px;
+      --max: 980px;
+      --font: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(46,229,157,0.18), transparent 55%),
+        radial-gradient(900px 600px at 110% 10%, rgba(88,166,255,0.12), transparent 55%),
+        radial-gradient(900px 600px at 40% 120%, rgba(255,184,108,0.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    .app{
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: calc(14px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
+      gap: 12px;
+    }
+
+    header{
+      width: 100%;
+      max-width: var(--max);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 6px 0;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: 0.2px;
+    }
+    .brand p{
+      margin:0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+    }
+
+    .pill input{
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      width: 44vw;
+      max-width: 360px;
+      min-width: 170px;
+    }
+
+    .pill button{
+      border: none;
+      background: rgba(46,229,157,0.14);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid rgba(46,229,157,0.25);
+    }
+    .pill button:active{ transform: scale(0.98); }
+
+    main{
+      width: 100%;
+      max-width: var(--max);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      padding: 4px 0 0;
+    }
+
+    @media (min-width: 860px){
+      main{ grid-template-columns: 1.05fr 0.95fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card .top{
+      padding: 14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent);
+    }
+
+    .card .top h2{
+      margin:0;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: 0.2px;
+    }
+    .card .top .count{
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction: column;
+    }
+
+    .row{
+      padding: 12px 14px;
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      cursor: pointer;
+      background: transparent;
+      transition: background 120ms ease;
+    }
+    .row:hover{ background: rgba(255,255,255,0.04); }
+    .row:active{ background: rgba(255,255,255,0.06); }
+
+    .row.selected{
+      background: rgba(46,229,157,0.10);
+      outline: 1px solid rgba(46,229,157,0.22);
+    }
+
+    .row .titleline{
+      display:flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .row .name{
+      font-size: 15px;
+      font-weight: 650;
+      margin:0;
+      line-height: 1.15;
+    }
+    .badge{
+      font-size: 11px;
+      color: rgba(0,0,0,0.85);
+      background: var(--accent);
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dot::before{
+      content:"•";
+      margin: 0 6px 0 0;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .detail{
+      padding: 14px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 12px;
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .hero .hname{
+      margin:0;
+      font-size: 17px;
+      font-weight: 750;
+    }
+    .hero .hmeta{
+      margin:0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 520px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .kv{
+      padding: 12px;
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 78px;
+    }
+
+    .k{
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.25px;
+      text-transform: uppercase;
+    }
+    .v{
+      font-size: 14px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn{
+      flex: 1 1 160px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 12px 12px;
+      border-radius: 14px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+    }
+    .btn.primary{
+      border-color: rgba(46,229,157,0.25);
+      background: rgba(46,229,157,0.14);
+    }
+    .btn:active{ transform: scale(0.99); }
+
+    .hint{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .empty{
+      padding: 18px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer{
+      width: 100%;
+      max-width: var(--max);
+      padding: 2px 6px 0;
+      color: rgba(255,255,255,0.45);
+      font-size: 11px;
+      display:flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <h1>Moscheen im Bau</h1>
+        <p>Prototype · mobile-first · offline</p>
+      </div>
+
+      <div class="pill" role="search">
+        <span aria-hidden="true">🔎</span>
+        <input id="q" type="search" placeholder="Suchen (Stadt / Name) …" autocomplete="off" />
+        <button id="regen" type="button" title="Zufallsdaten neu generieren">Neu</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- LIST -->
+      <section class="card" aria-label="Liste der Moscheen">
+        <div class="top">
+          <h2>Übersicht</h2>
+          <div class="count" id="count">0</div>
+        </div>
+        <div class="list" id="list"></div>
+        <div class="empty" id="empty" style="display:none;">Keine Treffer. 🤷‍♂️</div>
+      </section>
+
+      <!-- DETAIL -->
+      <section class="card" aria-label="Details">
+        <div class="top">
+          <h2>Details</h2>
+          <div class="count" id="selectedHint">Tippe eine Moschee an</div>
+        </div>
+
+        <div class="detail" id="detail">
+          <div class="hero">
+            <p class="hname" style="margin:0;">Wähle links eine Moschee aus</p>
+            <p class="hmeta" style="margin:0;">Dann siehst du Kontaktdaten & Kontodaten (Dummy-Daten).</p>
+          </div>
+
+          <p class="hint">
+            Hinweis: Das ist ein reiner Prototype mit Zufallsdaten (keine echten Konten).
+            Später kannst du die Daten aus einer DB / Google Sheet / API laden.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>🔒 Offline Prototype (kein Tracking)</span>
+      <span class="mono" id="build"></span>
+    </footer>
+  </div>
+
+  <script>
+    // ----------- Helpers (Random / Fake Data) -----------
+    const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const pick = (arr) => arr[rand(0, arr.length - 1)];
+    const pad2 = (n) => String(n).padStart(2, "0");
+
+    function fakePhoneDE(){
+      // +49 15x xxxx xxxx
+      const p1 = pick(["151","152","157","159","160","170","171","172","173","174","175","176"]);
+      const mid = rand(1000, 9999);
+      const end = rand(1000, 9999);
+      return `+49 ${p1} ${mid} ${end}`;
+    }
+
+    function fakeEmail(name, city){
+      const slug = (s) => s.toLowerCase()
+        .replaceAll("ä","ae").replaceAll("ö","oe").replaceAll("ü","ue").replaceAll("ß","ss")
+        .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+      const domains = ["bauverein.org","moscheeprojekt.de","verein-net.de","improjekt.de","spendenkonto.de"];
+      return `kontakt@${slug(name)}-${slug(city)}.${pick(domains).split(".").slice(-2).join(".")}`;
+    }
+
+    function fakeIbanDE(){
+      // Not valid-checksum guaranteed; prototype only
+      const bank = String(rand(10000000, 99999999));
+      const acc  = String(rand(1000000000, 9999999999));
+      const chk  = String(rand(10, 99));
+      return `DE${chk} ${bank.slice(0,4)} ${bank.slice(4,8)} ${acc.slice(0,4)} ${acc.slice(4,8)} ${acc.slice(8,10)}`;
+    }
+
+    function fakeBic(){
+      const banks = ["GENODEF1","DEUTDEFF","COBADEFF","PBNKDEFF","BYLADEMM","DRESDEFF","NOLADE21","HELADEFF"];
+      return pick(banks) + pick(["XXX","FRA","BER","HAM","MUC","CGN",""]);
+    }
+
+    function pctDone(){
+      return rand(18, 92);
+    }
+
+    function euroGoal(){
+      // goal between 450k and 6.5m
+      const goals = [450000, 650000, 900000, 1200000, 1800000, 2500000, 3500000, 4800000, 6500000];
+      return pick(goals);
+    }
+
+    function euroRaised(goal){
+      // 10%..85% of goal
+      const ratio = (rand(10, 85) / 100);
+      return Math.round(goal * ratio / 1000) * 1000;
+    }
+
+    function formatEUR(n){
+      return new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", maximumFractionDigits:0 }).format(n);
+    }
+
+    function fakeAddress(city){
+      const streets = ["Hauptstraße","Bahnhofstraße","Gartenweg","Friedrichstraße","Taunusstraße","Ringstraße","Schillerstraße","Lindenallee","Bismarckstraße","Goethestraße"];
+      return `${pick(streets)} ${rand(3, 88)}, ${rand(10115, 99998)} ${city}`;
+    }
+
+    function fakeContactPerson(){
+      const fn = ["Mehmet","Ahmet","Mustafa","Yusuf","Emre","Murat","Ali","Ömer","İbrahim","Fatih","Serkan"];
+      const ln = ["Yılmaz","Kaya","Demir","Çelik","Şahin","Aydın","Koç","Arslan","Polat","Öztürk","Karaca"];
+      return `${pick(fn)} ${pick(ln)}`;
+    }
+
+    function fakeProjectName(city){
+      const p1 = ["Yeni","Umut","Selam","Rahmet","Huzur","Nur","Bereket","İkram","Medeniyet","Birlik"];
+      const p2 = ["Camii","Moschee","Islamisches Zentrum","Kültür Merkezi","Gemeindezentrum","Zentrum"];
+      // Mix DE/TR naming
+      return `${pick(p1)} ${pick(p2)} ${city}`;
+    }
+
+    function fakeStatus(){
+      const all = ["Rohbau","Innenausbau","Genehmigung","Fundament","Dach","Fassade","Elektrik","Sanitär"];
+      return pick(all);
+    }
+
+    function fakeBankName(){
+      const banks = [
+        "Volksbank Rhein-Main eG",
+        "Sparkasse Frankfurt",
+        "Commerzbank AG",
+        "Deutsche Bank",
+        "Postbank",
+        "Nassauische Sparkasse",
+        "Helaba (über Hausbank)"
+      ];
+      return pick(banks);
+    }
+
+    function genMosques(n = 10){
+      const cities = ["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden","Mainz","Aschaffenburg","Gießen","Kassel","Mannheim","Heidelberg","Koblenz"];
+      const arr = [];
+      for(let i=0;i<n;i++){
+        const city = pick(cities);
+        const name = fakeProjectName(city);
+        const goal = euroGoal();
+        const raised = euroRaised(goal);
+        arr.push({
+          id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + i,
+          name,
+          city,
+          status: fakeStatus(),
+          progress: pctDone(),
+          goal,
+          raised,
+          address: fakeAddress(city),
+          website: `https://www.${name.toLowerCase().replace(/[^a-z0-9]+/g,"").slice(0,18)}.org`,
+          contact: {
+            person: fakeContactPerson(),
+            phone: fakePhoneDE(),
+            email: fakeEmail(name, city)
+          },
+          bank: {
+            holder: `${name} e.V.`,
+            bankName: fakeBankName(),
+            iban: fakeIbanDE(),
+            bic: fakeBic(),
+            purpose: `Spende Moscheebau ${city} ${rand(2026, 2028)}`
+          },
+          updated: `${rand(1,28)}.${pad2(rand(1,12))}.2026`
+        });
+      }
+      return arr.sort((a,b)=> a.city.localeCompare(b.city));
+    }
+
+    // ----------- App State -----------
+    let DATA = genMosques(rand(9, 14));
+    let selectedId = null;
+
+    const els = {
+      q: document.getElementById("q"),
+      regen: document.getElementById("regen"),
+      list: document.getElementById("list"),
+      count: document.getElementById("count"),
+      empty: document.getElementById("empty"),
+      detail: document.getElementById("detail"),
+      selectedHint: document.getElementById("selectedHint"),
+      build: document.getElementById("build"),
+    };
+
+    els.build.textContent = "build " + new Date().toLocaleString("de-DE");
+
+    function filtered(){
+      const term = els.q.value.trim().toLowerCase();
+      if(!term) return DATA;
+      return DATA.filter(m =>
+        m.name.toLowerCase().includes(term) ||
+        m.city.toLowerCase().includes(term) ||
+        m.status.toLowerCase().includes(term)
+      );
+    }
+
+    function renderList(){
+      const items = filtered();
+      els.count.textContent = `${items.length} Projekte`;
+      els.list.innerHTML = "";
+      els.empty.style.display = items.length ? "none" : "block";
+
+      for(const m of items){
+        const row = document.createElement("div");
+        row.className = "row" + (m.id === selectedId ? " selected" : "");
+        row.tabIndex = 0;
+        row.setAttribute("role","button");
+        row.setAttribute("aria-label", `${m.name} auswählen`);
+
+        row.innerHTML = `
+          <div class="titleline">
+            <p class="name">${escapeHtml(m.name)}</p>
+            <span class="badge">${m.progress}%</span>
+          </div>
+          <div class="meta">
+            <span>${escapeHtml(m.city)}</span>
+            <span class="dot">${escapeHtml(m.status)}</span>
+            <span class="dot">Spenden: ${formatEUR(m.raised)} / ${formatEUR(m.goal)}</span>
+            <span class="dot">Update: ${escapeHtml(m.updated)}</span>
+          </div>
+        `;
+
+        row.addEventListener("click", () => select(m.id));
+        row.addEventListener("keydown", (e) => {
+          if(e.key === "Enter" || e.key === " ") { e.preventDefault(); select(m.id); }
+        });
+
+        els.list.appendChild(row);
+      }
+    }
+
+    function renderDetail(m){
+      els.selectedHint.textContent = "Ausgewählt";
+      els.detail.innerHTML = `
+        <div class="hero">
+          <p class="hname">${escapeHtml(m.name)}</p>
+          <p class="hmeta">
+            ${escapeHtml(m.city)} · ${escapeHtml(m.status)} · Fortschritt ${m.progress}% ·
+            Spenden ${formatEUR(m.raised)} / ${formatEUR(m.goal)}
+          </p>
+        </div>
+
+        <div class="grid">
+          <div class="kv">
+            <div class="k">Kontaktperson</div>
+            <div class="v">${escapeHtml(m.contact.person)}</div>
+          </div>
+          <div class="kv">
+            <div class="k">Telefon</div>
+            <div class="v">${escapeHtml(m.contact.phone)}</div>
+          </div>
+          <div class="kv">
+            <div class="k">E-Mail</div>
+            <div class="v">${escapeHtml(m.contact.email)}</div>
+          </div>
+          <div class="kv">
+            <div class="k">Adresse</div>
+            <div class="v">${escapeHtml(m.address)}</div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="kv">
+            <div class="k">Kontoinhaber</div>
+            <div class="v">${escapeHtml(m.bank.holder)}</div>
+          </div>
+          <div class="kv">
+            <div class="k">Bank</div>
+            <div class="v">${escapeHtml(m.bank.bankName)}</div>
+          </div>
+          <div class="kv">
+            <div class="k">IBAN</div>
+            <div class="v mono">${escapeHtml(m.bank.iban)}</div>
+          </div>
+          <div class="kv">
+            <div class="k">BIC</div>
+            <div class="v mono">${escapeHtml(m.bank.bic)}</div>
+          </div>
+          <div class="kv" style="grid-column: 1 / -1;">
+            <div class="k">Verwendungszweck (Beispiel)</div>
+            <div class="v">${escapeHtml(m.bank.purpose)}</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a class="btn primary" href="tel:${telHref(m.contact.phone)}">📞 Anrufen</a>
+          <a class="btn primary" href="mailto:${encodeURIComponent(m.contact.email)}?subject=${encodeURIComponent("Anfrage: " + m.name)}">✉️ E-Mail</a>
+          <button class="btn" type="button" id="copyIban">📋 IBAN kopieren</button>
+          <button class="btn" type="button" id="copyAll">📋 Alles kopieren</button>
+        </div>
+
+        <p class="hint">
+          Tipp: Mit „IBAN kopieren“ kannst du in Banking-Apps/Überweisung direkt einfügen.
+        </p>
+      `;
+
+      // copy buttons
+      document.getElementById("copyIban").addEventListener("click", async () => {
+        await safeCopy(m.bank.iban.replaceAll(" ",""));
+        toast("IBAN kopiert ✅");
+      });
+
+      document.getElementById("copyAll").addEventListener("click", async () => {
+        const text =
+`Projekt: ${m.name}
+Ort/Status: ${m.city} · ${m.status} · ${m.progress}%
+Kontakt: ${m.contact.person}
+Tel: ${m.contact.phone}
+Mail: ${m.contact.email}
+Adresse: ${m.address}
+
+Konto:
+Inhaber: ${m.bank.holder}
+Bank: ${m.bank.bankName}
+IBAN: ${m.bank.iban}
+BIC: ${m.bank.bic}
+Verwendungszweck: ${m.bank.purpose}`;
+        await safeCopy(text);
+        toast("Daten kopiert ✅");
+      });
+    }
+
+    function select(id){
+      selectedId = id;
+      renderList();
+      const m = DATA.find(x => x.id === id);
+      if(m) renderDetail(m);
+    }
+
+    function resetData(){
+      DATA = genMosques(rand(9, 14));
+      selectedId = null;
+      els.q.value = "";
+      els.selectedHint.textContent = "Tippe eine Moschee an";
+      els.detail.innerHTML = `
+        <div class="hero">
+          <p class="hname" style="margin:0;">Wähle links eine Moschee aus</p>
+          <p class="hmeta" style="margin:0;">Dann siehst du Kontaktdaten & Kontodaten (Dummy-Daten).</p>
+        </div>
+        <p class="hint">Hinweis: Reiner Prototype mit Zufallsdaten.</p>
+      `;
+      renderList();
+    }
+
+    els.q.addEventListener("input", renderList);
+    els.regen.addEventListener("click", resetData);
+
+    // ----------- Utilities -----------
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function telHref(phone){
+      return phone.replaceAll(" ", "").replaceAll("-", "");
+    }
+
+    async function safeCopy(text){
+      try{
+        await navigator.clipboard.writeText(text);
+      }catch{
+        // fallback for some mobile browsers when file://
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+    }
+
+    function toast(msg){
+      const t = document.createElement("div");
+      t.textContent = msg;
+      t.style.position = "fixed";
+      t.style.left = "50%";
+      t.style.bottom = "18px";
+      t.style.transform = "translateX(-50%)";
+      t.style.padding = "10px 14px";
+      t.style.borderRadius = "999px";
+      t.style.background = "rgba(0,0,0,0.65)";
+      t.style.border = "1px solid rgba(255,255,255,0.18)";
+      t.style.color = "white";
+      t.style.fontSize = "13px";
+      t.style.zIndex = 9999;
+      t.style.backdropFilter = "blur(10px)";
+      document.body.appendChild(t);
+      setTimeout(()=> t.remove(), 1400);
+    }
+
+    // Init
+    renderList();
+  </script>
+</body>
+</html>
