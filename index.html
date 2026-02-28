@@ -385,6 +385,10 @@ function normalizePhone(p){
   return p.replace(/[^\d+]/g, "");
 }
 
+function normalizeIBAN(iban){
+  return String(iban || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
 function render(){
   const query = (qInp.value || "").trim().toLowerCase();
   list.innerHTML = "";
@@ -515,24 +519,28 @@ function parseAmountEUR(raw){
  * Spec: "BCD" + version + SCT + BIC + Name + IBAN + Amount + ... + Remittance
  */
 function buildEPCPayload(item, amount){
-  // Betrag als "EUR12.34"
+  const iban = normalizeIBAN(item.iban);
+  const bic  = String(item.bic || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const name = String(item.holder || "").trim();
+  const rem  = String(item.purpose || "").trim();
+
+  // Betrag als EUR12.34
   const amt = "EUR" + amount.toFixed(2);
 
-  // Wichtig: Zeilenumbrüche genau so.
-  // Purpose kann in EPC entweder "purpose code" sein oder als unstructured remittance.
-  // Wir nutzen unstructured remittance (letzte Felder).
+  // EPC QR (GiroCode / EPC069-12)
+  // Felder müssen exakt in dieser Reihenfolge + Zeilenumbrüche
   return [
-    "BCD",        // Service tag
-    "002",        // Version
-    "1",          // Character set: 1 = UTF-8
-    "SCT",        // Identification: SEPA Credit Transfer
-    item.bic || "",      // BIC (optional, aber gut)
-    item.holder || "",   // Name of beneficiary
-    item.iban || "",     // IBAN
-    amt,               // Amount
-    "",                // Purpose (optional)
-    "",                // Remittance information structured (optional)
-    item.purpose || "" // Remittance information unstructured (Verwendungszweck)
+    "BCD",    // Service Tag
+    "001",    // Version (001 ist am kompatibelsten)
+    "1",      // Character set: 1 = UTF-8
+    "SCT",    // SEPA Credit Transfer
+    bic,      // BIC (optional – wenn leer, lassen)
+    name,     // Empfänger
+    iban,     // IBAN (OHNE Leerzeichen)
+    amt,      // Amount
+    "",       // Purpose of the credit transfer (4-stelliger Code, meistens leer)
+    rem,      // Remittance information (unstructured)
+    ""        // Information to beneficiary (optional)
   ].join("\n");
 }
 
@@ -570,6 +578,11 @@ function updateQRFromInput(){
 
   const payload = buildEPCPayload(currentItem, amount);
   amountHint.textContent = "QR-Code bereit: " + amount.toFixed(2) + " €";
+  const ibanClean = normalizeIBAN(currentItem.iban);
+  if(ibanClean.length < 15){ // grob: DE hat 22
+    toast("IBAN ungültig – QR wird nicht erstellt ❌");
+  return;
+}
   renderQR(payload);
 }
 
