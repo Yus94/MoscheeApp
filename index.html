@@ -1,256 +1,338 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0f172a" />
-  <title>Moscheen im Bau</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0f172a" />
+<title>Moscheen im Bau</title>
 
-  <style>
-    :root{
-      --bg: #0f172a;
-      --card: #1e293b;
-      --border: #334155;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --accent: #22c55e;
-      --radius: 16px;
-      --max: 720px;
-      --ios-bottom-ui: 96px;
-    }
+<style>
+:root{
+  --bg: #0f172a;
+  --card: rgba(255,255,255,0.05);
+  --border: rgba(255,255,255,0.10);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.60);
+  --accent: #2ee59d;
+  --radius: 18px;
+  --radius2: 14px;
+  --max: 860px;
+  --ios-bottom-ui: 96px;
+}
 
-    *{ box-sizing: border-box; }
-    html,body{ margin:0; padding:0; }
-    body{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100svh;
-    }
+*{ box-sizing:border-box; }
 
-    .app{
-      min-height: 100svh;
-      display:flex;
-      flex-direction: column;
-      align-items:center;
-      padding: 16px 16px calc(16px + env(safe-area-inset-bottom) + var(--ios-bottom-ui));
-      gap: 20px;
-    }
+html,body{
+  margin:0;
+  padding:0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  min-height:100svh;
+}
 
-    .container{
-      width:100%;
-      max-width: var(--max);
-      display:flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+/* App Layout */
+.app{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:
+    calc(16px + env(safe-area-inset-top))
+    16px
+    calc(24px + env(safe-area-inset-bottom) + var(--ios-bottom-ui));
+  gap:20px;
+}
 
-    h1{
-      font-size:20px;
-      margin:0;
-    }
+.shell{
+  width:100%;
+  max-width:var(--max);
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
 
-    .search{
-      display:flex;
-      background: var(--card);
-      border:1px solid var(--border);
-      border-radius: 999px;
-      padding: 12px 14px;
-      gap:10px;
-    }
+/* Topbar */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    .search input{
-      flex:1;
-      background:transparent;
-      border:none;
-      color:var(--text);
-      font-size:14px;
-      outline:none;
-    }
+.brand h1{
+  margin:0;
+  font-size:20px;
+}
 
-    .card{
-      background: var(--card);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      overflow:hidden;
-    }
+.brand p{
+  margin:4px 0 0;
+  font-size:13px;
+  color:var(--muted);
+}
 
-    .list-item{
-      padding:14px 16px;
-      border-bottom:1px solid var(--border);
-      cursor:pointer;
-    }
+.iconbtn{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  padding:10px 14px;
+  border-radius:999px;
+  font-size:14px;
+  cursor:pointer;
+}
 
-    .list-item:last-child{
-      border-bottom:none;
-    }
+/* Search */
+.search{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:999px;
+  margin-bottom:18px;
+}
 
-    .list-item h3{
-      margin:0 0 4px 0;
-      font-size:15px;
-    }
+.search input{
+  flex:1;
+  border:none;
+  outline:none;
+  background:transparent;
+  color:var(--text);
+  font-size:14px;
+}
 
-    .list-item p{
-      margin:0;
-      font-size:12px;
-      color: var(--muted);
-    }
+/* Card */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
 
-    .badge{
-      font-size:11px;
-      background: var(--accent);
-      color:#0f172a;
-      padding:4px 8px;
-      border-radius:999px;
-      font-weight:600;
-    }
+/* List */
+.row{
+  padding:16px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
 
-    .row-top{
-      display:flex;
-      justify-content: space-between;
-      align-items:center;
-    }
+.row:last-child{ border-bottom:none; }
 
-    .button{
-      display:inline-flex;
-      justify-content:center;
-      align-items:center;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      text-decoration:none;
-      font-size:14px;
-      cursor:pointer;
-    }
+.row:hover{
+  background:rgba(255,255,255,0.04);
+}
 
-    .button.primary{
-      background: var(--accent);
-      border:none;
-      color:#0f172a;
-      font-weight:600;
-    }
+.titleline{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
 
-    .button-row{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-    }
+.name{
+  font-weight:600;
+  font-size:15px;
+}
 
-    .detail{
-      display:none;
-      flex-direction: column;
-      gap:16px;
-    }
+.badge{
+  background:var(--accent);
+  color:#052b1b;
+  padding:5px 10px;
+  font-size:12px;
+  font-weight:700;
+  border-radius:999px;
+}
 
-    .detail.active{
-      display:flex;
-    }
+.meta{
+  font-size:13px;
+  color:var(--muted);
+}
 
-    .meta{
-      font-size:13px;
-      color: var(--muted);
-      line-height:1.4;
-    }
+/* Detail */
+.page{ display:none; }
+.page.active{ display:block; }
 
-    .kv{
-      font-size:14px;
-      line-height:1.5;
-    }
+.hero{
+  padding:20px;
+  border-bottom:1px solid var(--border);
+}
 
-    .kv strong{
-      display:block;
-      font-size:12px;
-      color: var(--muted);
-      margin-bottom:2px;
-    }
+.hero h2{
+  margin:0 0 6px;
+  font-size:18px;
+}
 
-  </style>
+.hero p{
+  margin:0;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.detail-content{
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.kv strong{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+.button{
+  margin-top:10px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+  font-size:14px;
+}
+
+.button.primary{
+  background:var(--accent);
+  border:none;
+  color:#052b1b;
+  font-weight:700;
+}
+
+.button-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+#page-detail .iconbtn{
+  margin-bottom: 16px;
+}
+
+.progress{
+  height: 8px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.progress > div{
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+}
+
+.sticky{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  padding-top: 6px;
+  padding-bottom: 10px;
+}
+
+.row:active{ transform: scale(0.99); }
+.card{ box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+
+.kv{ padding: 10px 0; border-bottom: 1px solid var(--border); }
+.kv:last-child{ border-bottom:none; }
+.kv strong{ letter-spacing: .4px; }
+
+</style>
 </head>
 
 <body>
 
 <div class="app">
-  <div class="container">
+  <div class="shell">
 
-    <div id="listPage">
-      <h1>Moscheen im Bau</h1>
+    <!-- LIST -->
 
-      <div class="search">
-        🔎
-        <input id="searchInput" placeholder="Suchen..." />
-      </div>
-
-      <div class="card" id="listContainer"></div>
-    </div>
-
-    <div id="detailPage" class="detail">
-      <button class="button" onclick="goBack()">← Zurück</button>
-
-      <div class="card" style="padding:16px;">
-        <h2 id="d_name"></h2>
-        <p class="meta" id="d_meta"></p>
-
-        <div class="kv"><strong>Kontakt</strong><span id="d_contact"></span></div>
-        <div class="kv"><strong>Telefon</strong><span id="d_phone"></span></div>
-        <div class="kv"><strong>E-Mail</strong><span id="d_email"></span></div>
-        <div class="kv"><strong>IBAN</strong><span id="d_iban"></span></div>
-        <div class="kv"><strong>BIC</strong><span id="d_bic"></span></div>
-
-        <div class="button-row" style="margin-top:16px;">
-          <a id="callBtn" class="button primary">Anrufen</a>
-          <button class="button" onclick="copyIBAN()">IBAN kopieren</button>
+    <section id="page-list" class="page active">
+      <div class="sticky">
+      <div class="topbar">
+        <div class="brand">
+          <h1>Moscheen im Bau</h1>
+          <p>Übersicht der Projekte</p>
         </div>
       </div>
-    </div>
+      <div class="search">
+        🔎
+        <input id="q" placeholder="Suchen..." />
+      </div>
+      </div>
+      <div class="card" id="list"></div>
+    </section>
+
+    <!-- DETAIL -->
+    <section id="page-detail" class="page">
+      <button class="iconbtn" onclick="goBack()">← Zurück</button>
+
+      <div class="card">
+        <div class="hero">
+          <h2 id="d_name"></h2>
+          <p id="d_meta"></p>
+        </div>
+
+        <div class="detail-content">
+          <div class="kv"><strong>Kontakt</strong><span id="d_contact"></span></div>
+          <div class="kv"><strong>Telefon</strong><span id="d_phone"></span></div>
+          <div class="kv"><strong>E-Mail</strong><span id="d_email"></span></div>
+          <div class="kv"><strong>IBAN</strong><span id="d_iban"></span></div>
+          <div class="kv"><strong>BIC</strong><span id="d_bic"></span></div>
+
+          <div class="button-row">
+            <a id="callBtn" class="button primary">Anrufen</a>
+            <button class="button" onclick="copyIBAN()">IBAN kopieren</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
   </div>
 </div>
 
 <script>
-const cities = ["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden"];
-const names = ["Umut Moschee","Rahmet Zentrum","Selam Camii","Nur Gemeinde","Huzur Zentrum"];
-
 function random(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+const cities=["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden"];
+const names=["Umut Moschee","Rahmet Zentrum","Selam Camii","Nur Gemeinde","Huzur Zentrum"];
 
-function generateData(){
-  return Array.from({length:8}).map((_,i)=>({
-    id:i,
-    name:names[random(0,names.length-1)]+" "+cities[random(0,cities.length-1)],
-    city:cities[random(0,cities.length-1)],
-    progress:random(20,90),
-    contact:"Mustafa Kaya",
-    phone:"+49 170 "+random(1000000,9999999),
-    email:"kontakt@moschee.de",
-    iban:"DE"+random(10,99)+" 1234 5678 9012 3456 78",
-    bic:"GENODEF1XXX"
-  }));
-}
+const data=Array.from({length:8}).map((_,i)=>({
+  id:i,
+  name:names[random(0,names.length-1)]+" "+cities[random(0,cities.length-1)],
+  city:cities[random(0,cities.length-1)],
+  progress:random(20,90),
+  contact:"Mustafa Kaya",
+  phone:"+49 170 "+random(1000000,9999999),
+  email:"kontakt@moschee.de",
+  iban:"DE"+random(10,99)+" 1234 5678 9012 3456 78",
+  bic:"GENODEF1XXX"
+}));
 
-let data = generateData();
-const listContainer = document.getElementById("listContainer");
+const list=document.getElementById("list");
 
-function renderList(){
-  listContainer.innerHTML="";
+function render(){
+  list.innerHTML="";
   data.forEach(item=>{
     const div=document.createElement("div");
-    div.className="list-item";
+    div.className="row";
     div.innerHTML=`
-      <div class="row-top">
-        <h3>${item.name}</h3>
-        <span class="badge">${item.progress}%</span>
+      <div class="titleline">
+        <div class="name">${item.name}</div>
+        <div class="badge">${item.progress}%</div>
       </div>
-      <p>${item.city}</p>
+      <div class="meta">${item.city}</div>
+      <div class="progress"><div style="width:${item.progress}%"></div></div>
     `;
     div.onclick=()=>showDetail(item);
-    listContainer.appendChild(div);
+    list.appendChild(div);
   });
 }
 
 function showDetail(item){
-  document.getElementById("listPage").style.display="none";
-  document.getElementById("detailPage").classList.add("active");
+  document.getElementById("page-list").classList.remove("active");
+  document.getElementById("page-detail").classList.add("active");
 
   d_name.textContent=item.name;
   d_meta.textContent=item.city+" • Fortschritt "+item.progress+"%";
@@ -263,16 +345,43 @@ function showDetail(item){
 }
 
 function goBack(){
-  document.getElementById("listPage").style.display="block";
-  document.getElementById("detailPage").classList.remove("active");
+  document.getElementById("page-detail").classList.remove("active");
+  document.getElementById("page-list").classList.add("active");
+}
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => {
+    t.style.display = "none";
+  }, 1200);
 }
 
 function copyIBAN(){
   navigator.clipboard.writeText(d_iban.textContent);
-  alert("IBAN kopiert");
+  toast("IBAN kopiert ✅");
 }
-renderList();
+
+render();
 </script>
+
+<div id="toast" style="
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.75);
+  color: white;
+  font-size: 13px;
+  z-index: 9999;
+  display: none;
+">
+  ✅
+</div>
 
 </body>
 </html>
