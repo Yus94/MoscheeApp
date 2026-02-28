@@ -20,6 +20,7 @@
       --gap: 12px;
       --max: 860px;
       --font: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --ios-bottom-ui: 88px;
     }
 
     *{ box-sizing: border-box; }
@@ -338,6 +339,18 @@
       display:none;
     }
     .toast.show{ display:block; }
+  
+  .app{
+  min-height: 100svh;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom) + var(--ios-bottom-ui));
+  }
+  
+  /* optional: gibt auch innerhalb der Seiten etwas Luft */
+  #page-list,
+  #page-detail{
+    padding-bottom: calc(env(safe-area-inset-bottom) + var(--ios-bottom-ui));
+  }
+  body{ min-height: 100svh; }
   </style>
 </head>
 
