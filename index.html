@@ -285,6 +285,37 @@ html,body{
           <div class="kv"><strong>Kontoinhaber</strong><span id="d_holder"></span></div>          
           <div class="kv"><strong>BIC</strong><span id="d_bic"></span></div>
           <div class="kv"><strong>Verwendungszweck</strong><span id="d_purpose"></span></div>
+          <div class="kv">
+            <strong>Spendenbetrag (€)</strong>
+            <input id="don_amount" inputmode="decimal" type="number" min="1" step="0.50" placeholder="z.B. 50" style="
+              width: 100%;
+              margin-top: 8px;
+              padding: 12px 12px;
+              border-radius: 12px;
+              border: 1px solid var(--border);
+              background: rgba(255,255,255,0.06);
+              color: var(--text);
+              font-size: 14px;
+              outline: none;
+            " />
+            <div id="amount_hint" class="meta" style="margin-top:8px;">
+              Betrag eingeben → QR-Code wird erstellt (SEPA-Überweisung).
+            </div>
+          </div>
+
+          <div class="kv">
+            <strong>QR-Code (SEPA)</strong>
+            <div style="margin-top:10px; display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+              <canvas id="qrCanvas" width="220" height="220" style="
+                background: white;
+                border-radius: 14px;
+                padding: 10px;
+              "></canvas>
+              <div class="meta" style="max-width: 360px;">
+                Scanne den QR-Code in deiner Banking-App. Empfänger, IBAN, Verwendungszweck und Betrag werden übernommen.
+              </div>
+            </div>
+          </div>
 
           <div class="button-row">
             <a id="callBtn" class="button primary">Anrufen</a>
@@ -297,6 +328,8 @@ html,body{
 
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
 <script>
 function random(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
@@ -318,11 +351,48 @@ const data=Array.from({length:8}).map((_,i)=>({
   purpose: "Spende Moscheebau " + cities[random(0,cities.length-1)]
 }));
 
-const list=document.getElementById("list");
+let currentItem = null;
+
+const list = document.getElementById("list");
+const qInp  = document.getElementById("q");
+
+const d_name    = document.getElementById("d_name");
+const d_meta    = document.getElementById("d_meta");
+const d_contact = document.getElementById("d_contact");
+const d_phone   = document.getElementById("d_phone");
+const d_email   = document.getElementById("d_email");
+const d_address = document.getElementById("d_address");
+const d_iban    = document.getElementById("d_iban");
+const d_holder  = document.getElementById("d_holder");
+const d_bic     = document.getElementById("d_bic");
+const d_purpose = document.getElementById("d_purpose");
+
+const callBtn = document.getElementById("callBtn");
+const mailBtn = document.getElementById("mailBtn");
+
+const donAmount = document.getElementById("don_amount");
+const qrCanvas  = document.getElementById("qrCanvas");
+const amountHint = document.getElementById("amount_hint");
+
+function normalizePhone(p){
+  // tel: mag oft keine Leerzeichen/Klammern
+  return p.replace(/[^\d+]/g, "");
+}
 
 function render(){
-  list.innerHTML="";
-  data.forEach(item=>{
+  const query = (qInp.value || "").trim().toLowerCase();
+  list.innerHTML = "";
+
+  const filtered = data.filter(item => {
+    if(!query) return true;
+    return (
+      item.name.toLowerCase().includes(query) ||
+      item.city.toLowerCase().includes(query) ||
+      item.contact.toLowerCase().includes(query)
+    );
+  });
+
+  filtered.forEach(item=>{
     const div=document.createElement("div");
     div.className="row";
     div.innerHTML=`
@@ -336,25 +406,49 @@ function render(){
     div.onclick=()=>showDetail(item);
     list.appendChild(div);
   });
+
+  if(filtered.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "row";
+    empty.style.cursor = "default";
+    empty.innerHTML = `<div class="meta">Keine Treffer.</div>`;
+    list.appendChild(empty);
+  }
 }
 
 function showDetail(item){
   document.getElementById("page-list").classList.remove("active");
   document.getElementById("page-detail").classList.add("active");
 
-  d_name.textContent=item.name;
-  d_meta.textContent=item.city+" • Fortschritt "+item.progress+"%";
-  d_contact.textContent=item.contact;
-  d_phone.textContent=item.phone;
-  d_email.textContent=item.email;
+  d_name.textContent    = item.name;
+  d_meta.textContent    = item.city + " • Fortschritt " + item.progress + "%";
+  d_contact.textContent = item.contact;
+  d_phone.textContent   = item.phone;
+  d_email.textContent   = item.email;
   d_address.textContent = item.address;
   d_holder.textContent  = item.holder;
-  d_iban.textContent=item.iban;
-  d_bic.textContent=item.bic;
+  d_iban.textContent    = item.iban;
+  d_bic.textContent     = item.bic;
   d_purpose.textContent = item.purpose;
-  callBtn.href="tel:"+item.phone;
-  d_holder.textContent  = item.holder;
-}
+
+  const tel = normalizePhone(item.phone);
+  callBtn.href = "tel:" + tel;
+
+  // mailto inkl. Betreff + Body (optional)
+  const subject = encodeURIComponent("Spende für " + item.name);
+  const body = encodeURIComponent(
+    "Selamün aleyküm,\n\nich möchte für euer Bauprojekt spenden.\nKönnt ihr mir kurz bestätigen:\n- Kontoinhaber: " + item.holder + "\n- Verwendungszweck: " + item.purpose + "\n\nDanke!\n"
+  );
+  mailBtn.href = `mailto:${item.email}?subject=${subject}&body=${body}`;
+
+  currentItem = item;
+
+  // Betrag pro Projekt “merken”
+  donAmount.value = item._amount ?? "";
+
+  // QR initial (nur wenn Betrag vorhanden)
+  updateQRFromInput();
+  }
 
 function goBack(){
   document.getElementById("page-detail").classList.remove("active");
@@ -372,9 +466,111 @@ function toast(msg){
 }
 
 function copyIBAN(){
-  navigator.clipboard.writeText(d_iban.textContent);
-  toast("IBAN kopiert ✅");
+  // iOS Safari kann clipboard manchmal blocken -> fallback
+  const text = d_iban.textContent;
+
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(() => toast("IBAN kopiert ✅"))
+    .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
 }
+
+function fallbackCopy(text){
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.left = "-9999px";
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand("copy");
+    toast("IBAN kopiert ✅");
+  } catch(e){
+    toast("Kopieren nicht möglich ❌");
+  }
+  document.body.removeChild(ta);
+}
+
+function parseAmountEUR(raw){
+  if(raw == null) return null;
+  const s = String(raw).trim().replace(",", ".");
+  if(!s) return null;
+  const x = Number(s);
+  if(!Number.isFinite(x) || x <= 0) return null;
+  // EPC mag 2 Dezimalstellen
+  return Math.round(x * 100) / 100;
+}
+
+/**
+ * EPC QR (SEPA Credit Transfer) payload
+ * Spec: "BCD" + version + SCT + BIC + Name + IBAN + Amount + ... + Remittance
+ */
+function buildEPCPayload(item, amount){
+  // Betrag als "EUR12.34"
+  const amt = "EUR" + amount.toFixed(2);
+
+  // Wichtig: Zeilenumbrüche genau so.
+  // Purpose kann in EPC entweder "purpose code" sein oder als unstructured remittance.
+  // Wir nutzen unstructured remittance (letzte Felder).
+  return [
+    "BCD",        // Service tag
+    "002",        // Version
+    "1",          // Character set: 1 = UTF-8
+    "SCT",        // Identification: SEPA Credit Transfer
+    item.bic || "",      // BIC (optional, aber gut)
+    item.holder || "",   // Name of beneficiary
+    item.iban || "",     // IBAN
+    amt,               // Amount
+    "",                // Purpose (optional)
+    "",                // Remittance information structured (optional)
+    item.purpose || "" // Remittance information unstructured (Verwendungszweck)
+  ].join("\n");
+}
+
+function renderQR(text){
+  if(!window.QRCode){
+    toast("QR-Library nicht geladen ❌");
+    return;
+  }
+  QRCode.toCanvas(qrCanvas, text, {
+    errorCorrectionLevel: "M",
+    margin: 1,
+    width: 220
+  }, (err) => {
+    if(err){
+      console.error(err);
+      toast("QR konnte nicht erstellt werden ❌");
+    }
+  });
+}
+
+function updateQRFromInput(){
+  if(!currentItem) return;
+
+  const amount = parseAmountEUR(donAmount.value);
+  if(!amount){
+    amountHint.textContent = "Betrag eingeben → QR-Code wird erstellt (SEPA-Überweisung).";
+    // Optional: leeren QR anzeigen
+    renderQR("Betrag fehlt");
+    return;
+  }
+
+  // speichern
+  currentItem._amount = amount;
+
+  const payload = buildEPCPayload(currentItem, amount);
+  amountHint.textContent = "QR-Code bereit: " + amount.toFixed(2) + " €";
+  renderQR(payload);
+}
+
+// live
+donAmount.addEventListener("input", updateQRFromInput);
+
+// live search
+qInp.addEventListener("input", render);
 
 render();
 </script>
