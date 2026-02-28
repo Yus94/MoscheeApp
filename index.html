@@ -191,6 +191,7 @@ html,body{
   color:var(--text);
   cursor:pointer;
   font-size:14px;
+  text-decoration: none;
 }
 
 .button.primary{
@@ -279,11 +280,15 @@ html,body{
           <div class="kv"><strong>Kontakt</strong><span id="d_contact"></span></div>
           <div class="kv"><strong>Telefon</strong><span id="d_phone"></span></div>
           <div class="kv"><strong>E-Mail</strong><span id="d_email"></span></div>
+          <div class="kv"><strong>Adresse</strong><span id="d_address"></span></div>
           <div class="kv"><strong>IBAN</strong><span id="d_iban"></span></div>
+          <div class="kv"><strong>Kontoinhaber</strong><span id="d_holder"></span></div>          
           <div class="kv"><strong>BIC</strong><span id="d_bic"></span></div>
+          <div class="kv"><strong>Verwendungszweck</strong><span id="d_purpose"></span></div>
 
           <div class="button-row">
             <a id="callBtn" class="button primary">Anrufen</a>
+            <a id="mailBtn" class="button primary">E-Mail</a>
             <button class="button" onclick="copyIBAN()">IBAN kopieren</button>
           </div>
         </div>
@@ -307,7 +312,10 @@ const data=Array.from({length:8}).map((_,i)=>({
   phone:"+49 170 "+random(1000000,9999999),
   email:"kontakt@moschee.de",
   iban:"DE"+random(10,99)+" 1234 5678 9012 3456 78",
-  bic:"GENODEF1XXX"
+  bic:"GENODEF1XXX",
+  address: "Hauptstraße " + random(3,88) + ", " + random(60311,65936) + " " + cities[random(0,cities.length-1)],
+  holder: "Moscheeprojekt " + cities[random(0,cities.length-1)] + " e.V.",
+  purpose: "Spende Moscheebau " + cities[random(0,cities.length-1)]
 }));
 
 const list=document.getElementById("list");
@@ -339,9 +347,13 @@ function showDetail(item){
   d_contact.textContent=item.contact;
   d_phone.textContent=item.phone;
   d_email.textContent=item.email;
+  d_address.textContent = item.address;
+  d_holder.textContent  = item.holder;
   d_iban.textContent=item.iban;
   d_bic.textContent=item.bic;
+  d_purpose.textContent = item.purpose;
   callBtn.href="tel:"+item.phone;
+  d_holder.textContent  = item.holder;
 }
 
 function goBack(){
