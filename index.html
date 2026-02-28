@@ -3,789 +3,277 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b3d2e" />
-  <title>Moscheen im Bau – Prototype</title>
+  <meta name="theme-color" content="#0f172a" />
+  <title>Moscheen im Bau</title>
 
   <style>
     :root{
-      --bg: #0b1220;
-      --card: rgba(255,255,255,0.06);
-      --card2: rgba(255,255,255,0.09);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.68);
-      --accent: #2ee59d;
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-      --radius: 18px;
-      --radius2: 14px;
-      --gap: 12px;
-      --max: 860px;
-      --font: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      --ios-bottom-ui: 120px;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --radius: 16px;
+      --max: 720px;
+      --ios-bottom-ui: 96px;
     }
 
     *{ box-sizing: border-box; }
-    html,body{ height: 100%; }
+    html,body{ margin:0; padding:0; }
     body{
-      margin: 0;
-      font-family: var(--font);
-      background:
-        radial-gradient(1200px 800px at 20% -10%, rgba(46,229,157,0.18), transparent 55%),
-        radial-gradient(900px 600px at 110% 10%, rgba(88,166,255,0.12), transparent 55%),
-        radial-gradient(900px 600px at 40% 120%, rgba(255,184,108,0.10), transparent 55%),
-        var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
       color: var(--text);
+      min-height: 100svh;
     }
 
-    /* ----- App shell ----- */
     .app{
-      min-height: 100%;
-      display: flex;
+      min-height: 100svh;
+      display:flex;
       flex-direction: column;
-      align-items: center;
-      padding: calc(10px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));
-      gap: 10px;
+      align-items:center;
+      padding: 16px 16px calc(16px + env(safe-area-inset-bottom) + var(--ios-bottom-ui));
+      gap: 20px;
     }
 
-    .shell{
-      width: 100%;
+    .container{
+      width:100%;
       max-width: var(--max);
-      display: flex;
+      display:flex;
       flex-direction: column;
       gap: 18px;
     }
 
-    /* ----- Top bar ----- */
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 8px 2px 0;
-      margin-bottom: 10px;
-    }
-
-    .brand{
-      display:flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-    .brand h1{
+    h1{
+      font-size:20px;
       margin:0;
-      font-size: 18px;
-      letter-spacing: 0.2px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .brand p{
-      margin:0;
-      font-size: 12px;
-      color: var(--muted);
     }
 
-    .iconbtn{
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 14px;
-      cursor: pointer;
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    .iconbtn.primary{
-      border-color: rgba(46,229,157,0.25);
-      background: rgba(46,229,157,0.14);
-    }
-    .iconbtn:active{ transform: scale(0.99); }
-
-    /* ----- Search row ----- */
     .search{
       display:flex;
-      align-items:center;
-      gap: 10px;
       background: var(--card);
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 10px 12px;
+      border:1px solid var(--border);
       border-radius: 999px;
-      box-shadow: var(--shadow);
-    }
-    .search span{ opacity: .85; }
-    .search input{
-      width: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: var(--text);
-      font-size: 14px;
-      min-width: 0;
-    }
-    .search button{
-      border: 1px solid rgba(46,229,157,0.25);
-      background: rgba(46,229,157,0.14);
-      color: var(--text);
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      cursor: pointer;
-      white-space: nowrap;
+      padding: 12px 14px;
+      gap:10px;
     }
 
-    /* ----- Cards ----- */
+    .search input{
+      flex:1;
+      background:transparent;
+      border:none;
+      color:var(--text);
+      font-size:14px;
+      outline:none;
+    }
+
     .card{
       background: var(--card);
-      border: 1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      margin-top: 10px;
+      overflow:hidden;
     }
-    .card .top{
-      padding: 14px 14px 10px;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent);
+
+    .list-item{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      cursor:pointer;
     }
-    .card .top h2{
+
+    .list-item:last-child{
+      border-bottom:none;
+    }
+
+    .list-item h3{
+      margin:0 0 4px 0;
+      font-size:15px;
+    }
+
+    .list-item p{
       margin:0;
-      font-size: 15px;
-      font-weight: 650;
-    }
-    .pill{
-      font-size: 12px;
+      font-size:12px;
       color: var(--muted);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      padding: 6px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
     }
 
-    /* ----- List rows ----- */
-    .list{ display:flex; flex-direction: column; }
-    .row{
-      padding: 12px 14px;
-      display:flex;
-      flex-direction: column;
-      gap: 6px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      cursor: pointer;
-      transition: background 120ms ease;
-    }
-    .row:hover{ background: rgba(255,255,255,0.04); }
-    .row:active{ background: rgba(255,255,255,0.06); }
-
-    .titleline{
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .name{
-      margin:0;
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.15;
-    }
     .badge{
-      font-size: 11px;
-      color: rgba(0,0,0,0.85);
+      font-size:11px;
       background: var(--accent);
-      padding: 5px 8px;
-      border-radius: 999px;
-      font-weight: 700;
-      white-space: nowrap;
+      color:#0f172a;
+      padding:4px 8px;
+      border-radius:999px;
+      font-weight:600;
     }
-    .meta{
+
+    .row-top{
       display:flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .dot::before{
-      content:"•";
-      margin: 0 6px 0 0;
-      color: rgba(255,255,255,0.35);
+      justify-content: space-between;
+      align-items:center;
     }
 
-    .empty{
-      padding: 18px 14px;
-      color: var(--muted);
-      font-size: 13px;
+    .button{
+      display:inline-flex;
+      justify-content:center;
+      align-items:center;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      text-decoration:none;
+      font-size:14px;
+      cursor:pointer;
     }
 
-    /* ----- Detail page ----- */
-    .page{ display:none; }
-    .page.active{ display:block; }
+    .button.primary{
+      background: var(--accent);
+      border:none;
+      color:#0f172a;
+      font-weight:600;
+    }
 
-    .hero{
-      padding: 18px 16px;
+    .button-row{
       display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .detail{
+      display:none;
       flex-direction: column;
-      gap: 6px;
-    }
-    .hero h2{
-      margin:0;
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .hero p{
-      margin:0;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.35;
+      gap:16px;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      padding: 0 16px 18px;
+    .detail.active{
+      display:flex;
     }
-    @media (min-width: 520px){
-      .grid{ grid-template-columns: 1fr 1fr; }
+
+    .meta{
+      font-size:13px;
+      color: var(--muted);
+      line-height:1.4;
     }
 
     .kv{
-      padding: 12px;
-      border-radius: var(--radius2);
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.09);
-      display:flex;
-      flex-direction: column;
-      gap: 4px;
-      min-height: 78px;
+      font-size:14px;
+      line-height:1.5;
     }
-    .k{
-      font-size: 11px;
+
+    .kv strong{
+      display:block;
+      font-size:12px;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.25px;
-    }
-    .v{
-      font-size: 14px;
-      font-weight: 700;
-      word-break: break-word;
-    }
-    .mono{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-weight: 650;
+      margin-bottom:2px;
     }
 
-    .actions{
-      padding: 0 14px 14px;
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .btn{
-      flex: 1 1 150px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      padding: 12px 12px;
-      border-radius: 14px;
-      font-size: 14px;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    .btn.primary{
-      border-color: rgba(46,229,157,0.25);
-      background: rgba(46,229,157,0.14);
-    }
-    .btn:active{ transform: scale(0.99); }
-
-    footer{
-      width: 100%;
-      max-width: var(--max);
-      padding: 2px 2px 0;
-      color: rgba(255,255,255,0.45);
-      font-size: 11px;
-      display:flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    /* small toast */
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.65);
-      border: 1px solid rgba(255,255,255,0.18);
-      color: white;
-      font-size: 13px;
-      z-index: 9999;
-      backdrop-filter: blur(10px);
-      display:none;
-    }
-    .toast.show{ display:block; }
-  
-  .app{
-  min-height: 100svh;
-  padding-bottom: calc(14px + env(safe-area-inset-bottom) + var(--ios-bottom-ui));
-  }
-  
-  /* optional: gibt auch innerhalb der Seiten etwas Luft */
-  #page-list,
-  #page-detail{
-    padding-bottom: calc(env(safe-area-inset-bottom) + var(--ios-bottom-ui));
-  }
-  body{ min-height: 100svh; }
   </style>
 </head>
 
 <body>
-  <div class="app">
-    <div class="shell">
 
-      <!-- LIST PAGE -->
-      <section id="page-list" class="page active" aria-label="Übersicht">
-        <div class="topbar">
-          <div class="brand">
-            <h1>Moscheen im Bau</h1>
-            <p>Übersicht · tippe ein Projekt an</p>
-          </div>
-          <button class="iconbtn" id="regen" type="button" title="Zufallsdaten neu generieren">🔄 Neu</button>
-        </div>
+<div class="app">
+  <div class="container">
 
-        <div class="search" role="search">
-          <span aria-hidden="true">🔎</span>
-          <input id="q" type="search" placeholder="Suchen (Stadt / Name / Status) …" autocomplete="off" />
-          <button id="clear" type="button">Löschen</button>
-        </div>
+    <div id="listPage">
+      <h1>Moscheen im Bau</h1>
 
-        <div class="card">
-          <div class="top">
-            <h2>Projekte</h2>
-            <div class="pill" id="count">0</div>
-          </div>
-          <div class="list" id="list"></div>
-          <div class="empty" id="empty" style="display:none;">Keine Treffer. 🤷‍♂️</div>
-        </div>
-      </section>
+      <div class="search">
+        🔎
+        <input id="searchInput" placeholder="Suchen..." />
+      </div>
 
-      <!-- DETAIL PAGE -->
-      <section id="page-detail" class="page" aria-label="Details">
-        <div class="topbar">
-          <button class="iconbtn" id="back" type="button">← Zurück</button>
-          <div style="flex:1"></div>
-          <button class="iconbtn primary" id="share" type="button">🔗 Teilen</button>
-        </div>
-
-        <div class="card" id="detailCard">
-          <div class="hero">
-            <h2 id="d_name">—</h2>
-            <p id="d_meta">—</p>
-          </div>
-
-          <div class="grid">
-            <div class="kv">
-              <div class="k">Kontaktperson</div>
-              <div class="v" id="d_person">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">Telefon</div>
-              <div class="v" id="d_phone">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">E-Mail</div>
-              <div class="v" id="d_email">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">Adresse</div>
-              <div class="v" id="d_addr">—</div>
-            </div>
-
-            <div class="kv">
-              <div class="k">Kontoinhaber</div>
-              <div class="v" id="d_holder">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">Bank</div>
-              <div class="v" id="d_bank">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">IBAN</div>
-              <div class="v mono" id="d_iban">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">BIC</div>
-              <div class="v mono" id="d_bic">—</div>
-            </div>
-
-            <div class="kv" style="grid-column: 1 / -1;">
-              <div class="k">Verwendungszweck (Beispiel)</div>
-              <div class="v" id="d_purpose">—</div>
-            </div>
-          </div>
-
-          <div class="actions">
-            <a class="btn primary" id="callBtn" href="#">📞 Anrufen</a>
-            <a class="btn primary" id="mailBtn" href="#">✉️ E-Mail</a>
-            <button class="btn" id="copyIban" type="button">📋 IBAN kopieren</button>
-            <button class="btn" id="copyAll" type="button">📋 Alles kopieren</button>
-          </div>
-        </div>
-
-        <p style="margin:0; padding: 0 6px; color: var(--muted); font-size: 12px; line-height: 1.35;">
-          Hinweis: Prototype mit Zufallsdaten (keine echten Konten).
-        </p>
-      </section>
-
-      <footer>
-        <span>🔒 Nur Frontend (GitHub Pages)</span>
-        <span id="build"></span>
-      </footer>
+      <div class="card" id="listContainer"></div>
     </div>
+
+    <div id="detailPage" class="detail">
+      <button class="button" onclick="goBack()">← Zurück</button>
+
+      <div class="card" style="padding:16px;">
+        <h2 id="d_name"></h2>
+        <p class="meta" id="d_meta"></p>
+
+        <div class="kv"><strong>Kontakt</strong><span id="d_contact"></span></div>
+        <div class="kv"><strong>Telefon</strong><span id="d_phone"></span></div>
+        <div class="kv"><strong>E-Mail</strong><span id="d_email"></span></div>
+        <div class="kv"><strong>IBAN</strong><span id="d_iban"></span></div>
+        <div class="kv"><strong>BIC</strong><span id="d_bic"></span></div>
+
+        <div class="button-row" style="margin-top:16px;">
+          <a id="callBtn" class="button primary">Anrufen</a>
+          <button class="button" onclick="copyIBAN()">IBAN kopieren</button>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
 
-  <div class="toast" id="toast">✅</div>
+<script>
+const cities = ["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden"];
+const names = ["Umut Moschee","Rahmet Zentrum","Selam Camii","Nur Gemeinde","Huzur Zentrum"];
 
-  <script>
-    // ----------- Helpers (Fake Data) -----------
-    const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-    const pick = (arr) => arr[rand(0, arr.length - 1)];
-    const pad2 = (n) => String(n).padStart(2, "0");
+function random(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
-    function fakePhoneDE(){
-      const p1 = pick(["151","152","157","159","160","170","171","172","173","174","175","176"]);
-      return `+49 ${p1} ${rand(1000,9999)} ${rand(1000,9999)}`;
-    }
-    function slug(s){
-      return s.toLowerCase()
-        .replaceAll("ä","ae").replaceAll("ö","oe").replaceAll("ü","ue").replaceAll("ß","ss")
-        .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-    }
-    function fakeEmail(name, city){
-      const dom = pick(["bauverein.org","moscheeprojekt.de","verein-net.de","improjekt.de","spendenkonto.de"]);
-      return `kontakt@${slug(name).slice(0,30)}-${slug(city)}.${dom.split(".").slice(-2).join(".")}`;
-    }
-    function fakeIbanDE(){
-      const bank = String(rand(10000000, 99999999));
-      const acc  = String(rand(1000000000, 9999999999));
-      const chk  = String(rand(10, 99));
-      return `DE${chk} ${bank.slice(0,4)} ${bank.slice(4,8)} ${acc.slice(0,4)} ${acc.slice(4,8)} ${acc.slice(8,10)}`;
-    }
-    function fakeBic(){
-      const banks = ["GENODEF1","DEUTDEFF","COBADEFF","PBNKDEFF","BYLADEMM","NOLADE21","HELADEFF"];
-      return pick(banks) + pick(["XXX","FRA","BER","HAM","MUC","CGN",""]);
-    }
-    function euroGoal(){
-      return pick([450000,650000,900000,1200000,1800000,2500000,3500000,4800000,6500000]);
-    }
-    function euroRaised(goal){
-      const ratio = (rand(10, 85) / 100);
-      return Math.round(goal * ratio / 1000) * 1000;
-    }
-    function formatEUR(n){
-      return new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", maximumFractionDigits:0 }).format(n);
-    }
-    function fakeAddress(city){
-      const streets = ["Hauptstraße","Bahnhofstraße","Gartenweg","Friedrichstraße","Taunusstraße","Ringstraße","Schillerstraße","Lindenallee","Bismarckstraße","Goethestraße"];
-      return `${pick(streets)} ${rand(3, 88)}, ${rand(10115, 99998)} ${city}`;
-    }
-    function fakeContactPerson(){
-      const fn = ["Mehmet","Ahmet","Mustafa","Yusuf","Emre","Murat","Ali","Ömer","İbrahim","Fatih","Serkan"];
-      const ln = ["Yılmaz","Kaya","Demir","Çelik","Şahin","Aydın","Koç","Arslan","Polat","Öztürk","Karaca"];
-      return `${pick(fn)} ${pick(ln)}`;
-    }
-    function fakeProjectName(city){
-      const p1 = ["Yeni","Umut","Selam","Rahmet","Huzur","Nur","Bereket","İkram","Medeniyet","Birlik"];
-      const p2 = ["Camii","Moschee","Islamisches Zentrum","Kültür Merkezi","Gemeindezentrum","Zentrum"];
-      return `${pick(p1)} ${pick(p2)} ${city}`;
-    }
-    function fakeStatus(){
-      return pick(["Rohbau","Innenausbau","Genehmigung","Fundament","Dach","Fassade","Elektrik","Sanitär"]);
-    }
+function generateData(){
+  return Array.from({length:8}).map((_,i)=>({
+    id:i,
+    name:names[random(0,names.length-1)]+" "+cities[random(0,cities.length-1)],
+    city:cities[random(0,cities.length-1)],
+    progress:random(20,90),
+    contact:"Mustafa Kaya",
+    phone:"+49 170 "+random(1000000,9999999),
+    email:"kontakt@moschee.de",
+    iban:"DE"+random(10,99)+" 1234 5678 9012 3456 78",
+    bic:"GENODEF1XXX"
+  }));
+}
 
-    function genMosques(n = 12){
-      const cities = ["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden","Mainz","Aschaffenburg","Gießen","Kassel","Mannheim","Heidelberg","Koblenz"];
-      const arr = [];
-      for(let i=0;i<n;i++){
-        const city = pick(cities);
-        const name = fakeProjectName(city);
-        const goal = euroGoal();
-        const raised = euroRaised(goal);
-        arr.push({
-          id: (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + i),
-          name, city,
-          status: fakeStatus(),
-          progress: rand(18, 92),
-          goal, raised,
-          address: fakeAddress(city),
-          contact: {
-            person: fakeContactPerson(),
-            phone: fakePhoneDE(),
-            email: fakeEmail(name, city)
-          },
-          bank: {
-            holder: `${name} e.V.`,
-            bankName: pick([
-              "Volksbank Rhein-Main eG","Sparkasse Frankfurt","Commerzbank AG",
-              "Deutsche Bank","Postbank","Nassauische Sparkasse","Helaba (über Hausbank)"
-            ]),
-            iban: fakeIbanDE(),
-            bic: fakeBic(),
-            purpose: `Spende Moscheebau ${city} ${rand(2026, 2028)}`
-          },
-          updated: `${rand(1,28)}.${pad2(rand(1,12))}.2026`
-        });
-      }
-      return arr.sort((a,b)=> a.city.localeCompare(b.city));
-    }
+let data = generateData();
+const listContainer = document.getElementById("listContainer");
 
-    // ----------- State -----------
-    let DATA = genMosques(rand(9, 14));
+function renderList(){
+  listContainer.innerHTML="";
+  data.forEach(item=>{
+    const div=document.createElement("div");
+    div.className="list-item";
+    div.innerHTML=`
+      <div class="row-top">
+        <h3>${item.name}</h3>
+        <span class="badge">${item.progress}%</span>
+      </div>
+      <p>${item.city}</p>
+    `;
+    div.onclick=()=>showDetail(item);
+    listContainer.appendChild(div);
+  });
+}
 
-    const els = {
-      pageList: document.getElementById("page-list"),
-      pageDetail: document.getElementById("page-detail"),
-      q: document.getElementById("q"),
-      list: document.getElementById("list"),
-      count: document.getElementById("count"),
-      empty: document.getElementById("empty"),
-      regen: document.getElementById("regen"),
-      clear: document.getElementById("clear"),
-      back: document.getElementById("back"),
-      share: document.getElementById("share"),
-      build: document.getElementById("build"),
-      toast: document.getElementById("toast"),
+function showDetail(item){
+  document.getElementById("listPage").style.display="none";
+  document.getElementById("detailPage").classList.add("active");
 
-      d_name: document.getElementById("d_name"),
-      d_meta: document.getElementById("d_meta"),
-      d_person: document.getElementById("d_person"),
-      d_phone: document.getElementById("d_phone"),
-      d_email: document.getElementById("d_email"),
-      d_addr: document.getElementById("d_addr"),
-      d_holder: document.getElementById("d_holder"),
-      d_bank: document.getElementById("d_bank"),
-      d_iban: document.getElementById("d_iban"),
-      d_bic: document.getElementById("d_bic"),
-      d_purpose: document.getElementById("d_purpose"),
-      callBtn: document.getElementById("callBtn"),
-      mailBtn: document.getElementById("mailBtn"),
-      copyIban: document.getElementById("copyIban"),
-      copyAll: document.getElementById("copyAll"),
-    };
+  d_name.textContent=item.name;
+  d_meta.textContent=item.city+" • Fortschritt "+item.progress+"%";
+  d_contact.textContent=item.contact;
+  d_phone.textContent=item.phone;
+  d_email.textContent=item.email;
+  d_iban.textContent=item.iban;
+  d_bic.textContent=item.bic;
+  callBtn.href="tel:"+item.phone;
+}
 
-    els.build.textContent = "build " + new Date().toLocaleString("de-DE");
+function goBack(){
+  document.getElementById("listPage").style.display="block";
+  document.getElementById("detailPage").classList.remove("active");
+}
 
-    // ----------- Routing -----------
-    // list:   #/
-    // detail: #/m/<id>
-    function route(){
-      const hash = location.hash || "#/";
-      const m = hash.match(/^#\/m\/(.+)$/);
-      if(m){
-        const id = decodeURIComponent(m[1]);
-        const item = DATA.find(x => x.id === id);
-        if(item){
-          showDetail(item);
-          return;
-        }
-        // fallback
-        location.hash = "#/";
-        return;
-      }
-      showList();
-    }
+function copyIBAN(){
+  navigator.clipboard.writeText(d_iban.textContent);
+  alert("IBAN kopiert");
+}
 
-    function showList(){
-      els.pageDetail.classList.remove("active");
-      els.pageList.classList.add("active");
-      renderList();
-      // scroll restoration on mobile
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
+renderList();
+</script>
 
-    function showDetail(item){
-      els.pageList.classList.remove("active");
-      els.pageDetail.classList.add("active");
-      renderDetail(item);
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-
-    // ----------- List rendering -----------
-    function filtered(){
-      const term = els.q.value.trim().toLowerCase();
-      if(!term) return DATA;
-      return DATA.filter(x =>
-        x.name.toLowerCase().includes(term) ||
-        x.city.toLowerCase().includes(term) ||
-        x.status.toLowerCase().includes(term)
-      );
-    }
-
-    function renderList(){
-      const items = filtered();
-      els.count.textContent = `${items.length} Projekte`;
-      els.list.innerHTML = "";
-      els.empty.style.display = items.length ? "none" : "block";
-
-      for(const x of items){
-        const row = document.createElement("div");
-        row.className = "row";
-        row.tabIndex = 0;
-        row.setAttribute("role","button");
-        row.setAttribute("aria-label", `${x.name} öffnen`);
-
-        row.innerHTML = `
-          <div class="titleline">
-            <p class="name">${escapeHtml(x.name)}</p>
-            <span class="badge">${x.progress}%</span>
-          </div>
-          <div class="meta">
-            <span>${escapeHtml(x.city)}</span>
-            <span class="dot">${escapeHtml(x.status)}</span>
-            <span class="dot">Spenden: ${formatEUR(x.raised)} / ${formatEUR(x.goal)}</span>
-            <span class="dot">Update: ${escapeHtml(x.updated)}</span>
-          </div>
-        `;
-
-        row.addEventListener("click", () => {
-          location.hash = "#/m/" + encodeURIComponent(x.id);
-        });
-        row.addEventListener("keydown", (e) => {
-          if(e.key === "Enter" || e.key === " "){
-            e.preventDefault();
-            location.hash = "#/m/" + encodeURIComponent(x.id);
-          }
-        });
-
-        els.list.appendChild(row);
-      }
-    }
-
-    // ----------- Detail rendering -----------
-    function renderDetail(x){
-      els.d_name.textContent = x.name;
-      els.d_meta.textContent =
-        `${x.city} · ${x.status} · Fortschritt ${x.progress}% · Spenden ${formatEUR(x.raised)} / ${formatEUR(x.goal)} · Update: ${x.updated}`;
-
-      els.d_person.textContent = x.contact.person;
-      els.d_phone.textContent = x.contact.phone;
-      els.d_email.textContent = x.contact.email;
-      els.d_addr.textContent = x.address;
-
-      els.d_holder.textContent = x.bank.holder;
-      els.d_bank.textContent = x.bank.bankName;
-      els.d_iban.textContent = x.bank.iban;
-      els.d_bic.textContent = x.bank.bic;
-      els.d_purpose.textContent = x.bank.purpose;
-
-      els.callBtn.href = "tel:" + telHref(x.contact.phone);
-      els.mailBtn.href = "mailto:" + encodeURIComponent(x.contact.email) + "?subject=" + encodeURIComponent("Anfrage: " + x.name);
-
-      els.copyIban.onclick = async () => {
-        await safeCopy(x.bank.iban.replaceAll(" ",""));
-        toast("IBAN kopiert ✅");
-      };
-
-      els.copyAll.onclick = async () => {
-        const text =
-`Projekt: ${x.name}
-Ort/Status: ${x.city} · ${x.status} · ${x.progress}%
-Kontakt: ${x.contact.person}
-Tel: ${x.contact.phone}
-Mail: ${x.contact.email}
-Adresse: ${x.address}
-
-Konto:
-Inhaber: ${x.bank.holder}
-Bank: ${x.bank.bankName}
-IBAN: ${x.bank.iban}
-BIC: ${x.bank.bic}
-Verwendungszweck: ${x.bank.purpose}`;
-        await safeCopy(text);
-        toast("Daten kopiert ✅");
-      };
-
-      els.share.onclick = async () => {
-        const url = location.href;
-        try{
-          if(navigator.share){
-            await navigator.share({ title: x.name, text: "Moschee-Projekt", url });
-          }else{
-            await safeCopy(url);
-            toast("Link kopiert ✅");
-          }
-        }catch{
-          // user cancelled share -> ignore
-        }
-      };
-    }
-
-    // ----------- Actions -----------
-    els.q.addEventListener("input", renderList);
-    els.clear.addEventListener("click", () => { els.q.value = ""; renderList(); els.q.focus(); });
-
-    els.regen.addEventListener("click", () => {
-      DATA = genMosques(rand(9, 14));
-      els.q.value = "";
-      location.hash = "#/";
-      toast("Neue Projekte generiert ✅");
-    });
-
-    els.back.addEventListener("click", () => {
-      // If user came from list, browser back works; else go to list
-      if(history.length > 1) history.back();
-      else location.hash = "#/";
-    });
-
-    // ----------- Utils -----------
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-    function telHref(phone){
-      return phone.replaceAll(" ", "").replaceAll("-", "");
-    }
-    async function safeCopy(text){
-      try{
-        await navigator.clipboard.writeText(text);
-      }catch{
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        document.body.appendChild(ta);
-        ta.focus(); ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-      }
-    }
-    let toastTimer = null;
-    function toast(msg){
-      clearTimeout(toastTimer);
-      els.toast.textContent = msg;
-      els.toast.classList.add("show");
-      toastTimer = setTimeout(() => els.toast.classList.remove("show"), 1400);
-    }
-
-    // Init
-    window.addEventListener("hashchange", route);
-    route();
-  </script>
 </body>
 </html>
