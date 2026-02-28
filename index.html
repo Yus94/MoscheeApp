@@ -339,6 +339,49 @@ html,body{
 
 <script>
 function random(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+function padLeft(s, len){
+  s = String(s);
+  while(s.length < len) s = "0" + s;
+  return s;
+}
+
+function normalizeIBAN(iban){
+  return String(iban || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+function ibanToIntString(iban){
+  const moved = iban.slice(4) + iban.slice(0,4);
+  let out = "";
+  for(const ch of moved){
+    const code = ch.charCodeAt(0);
+    if(code >= 48 && code <= 57) out += ch;       // 0-9
+    else out += String(code - 55);                // A-Z -> 10-35
+  }
+  return out;
+}
+
+function mod97(numStr){
+  let rem = 0;
+  for(let i=0;i<numStr.length;i++){
+    rem = (rem * 10 + (numStr.charCodeAt(i)-48)) % 97;
+  }
+  return rem;
+}
+
+// erzeugt eine DE-IBAN mit korrekter Prüfziffer (Demo!)
+function makeGermanIBAN(){
+  const blz  = padLeft(random(10000000, 99999999), 8);     // 8-stellig
+  const acct = padLeft(random(0, 9999999999), 10);         // 10-stellig
+
+  const base = "DE00" + blz + acct;                        // 00 = Platzhalter
+  const numStr = ibanToIntString(base);
+  const check = 98 - mod97(numStr);
+  const checkStr = padLeft(check, 2);
+
+  return "DE" + checkStr + blz + acct;
+}
+
 const cities=["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden"];
 const names=["Umut Moschee","Rahmet Zentrum","Selam Camii","Nur Gemeinde","Huzur Zentrum"];
 
@@ -350,7 +393,7 @@ const data=Array.from({length:8}).map((_,i)=>({
   contact:"Mustafa Kaya",
   phone:"+49 170 "+random(1000000,9999999),
   email:"kontakt@moschee.de",
-  iban:"DE"+random(10,99)+" 1234 5678 9012 3456 78",
+  iban: makeGermanIBAN(),
   bic:"GENODEF1XXX",
   address: "Hauptstraße " + random(3,88) + ", " + random(60311,65936) + " " + cities[random(0,cities.length-1)],
   holder: "Moscheeprojekt " + cities[random(0,cities.length-1)] + " e.V.",
