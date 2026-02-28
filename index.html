@@ -306,11 +306,16 @@ html,body{
           <div class="kv">
             <strong>QR-Code (SEPA)</strong>
             <div style="margin-top:10px; display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
-              <canvas id="qrCanvas" width="220" height="220" style="
+              <div id="qrBox" style="
+                width: 220px;
+                height: 220px;
                 background: white;
                 border-radius: 14px;
                 padding: 10px;
-              "></canvas>
+                display:flex;
+                align-items:center;
+                justify-content:center;
+              "></div>
               <div class="meta" style="max-width: 360px;">
                 Scanne den QR-Code in deiner Banking-App. Empfänger, IBAN, Verwendungszweck und Betrag werden übernommen.
               </div>
@@ -329,7 +334,8 @@ html,body{
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 
 <script>
 function random(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
@@ -371,7 +377,7 @@ const callBtn = document.getElementById("callBtn");
 const mailBtn = document.getElementById("mailBtn");
 
 const donAmount = document.getElementById("don_amount");
-const qrCanvas  = document.getElementById("qrCanvas");
+const qrBox = document.getElementById("qrBox");
 const amountHint = document.getElementById("amount_hint");
 
 function normalizePhone(p){
@@ -531,19 +537,20 @@ function buildEPCPayload(item, amount){
 }
 
 function renderQR(text){
-  if(!window.QRCode){
+  if(typeof QRCode === "undefined"){
     toast("QR-Library nicht geladen ❌");
     return;
   }
-  QRCode.toCanvas(qrCanvas, text, {
-    errorCorrectionLevel: "M",
-    margin: 1,
-    width: 220
-  }, (err) => {
-    if(err){
-      console.error(err);
-      toast("QR konnte nicht erstellt werden ❌");
-    }
+
+  // Container leeren
+  qrBox.innerHTML = "";
+
+  // QR erzeugen (qrcodejs rendert ein Canvas im Container)
+  new QRCode(qrBox, {
+    text: text,
+    width: 200,
+    height: 200,
+    correctLevel: QRCode.CorrectLevel.M
   });
 }
 
