@@ -14,12 +14,11 @@
       --text: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.68);
       --accent: #2ee59d;
-      --danger: #ff6b6b;
       --shadow: 0 10px 30px rgba(0,0,0,0.35);
       --radius: 18px;
       --radius2: 14px;
-      --gap: 14px;
-      --max: 980px;
+      --gap: 12px;
+      --max: 860px;
       --font: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
 
@@ -36,34 +35,46 @@
       color: var(--text);
     }
 
+    /* ----- App shell ----- */
     .app{
       min-height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: calc(14px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
-      gap: 12px;
+      padding: calc(10px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));
+      gap: 10px;
     }
 
-    header{
+    .shell{
       width: 100%;
       max-width: var(--max);
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ----- Top bar ----- */
+    .topbar{
+      display:flex;
+      align-items:center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 10px 6px 0;
+      gap: 10px;
+      padding: 8px 2px 0;
     }
 
     .brand{
       display:flex;
       flex-direction: column;
       gap: 2px;
+      min-width: 0;
     }
     .brand h1{
       margin:0;
       font-size: 18px;
       letter-spacing: 0.2px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
     .brand p{
       margin:0;
@@ -71,53 +82,58 @@
       color: var(--muted);
     }
 
-    .pill{
-      display:flex;
+    .iconbtn{
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      display:inline-flex;
       align-items:center;
       gap: 8px;
+      white-space: nowrap;
+    }
+    .iconbtn.primary{
+      border-color: rgba(46,229,157,0.25);
+      background: rgba(46,229,157,0.14);
+    }
+    .iconbtn:active{ transform: scale(0.99); }
+
+    /* ----- Search row ----- */
+    .search{
+      display:flex;
+      align-items:center;
+      gap: 10px;
       background: var(--card);
       border: 1px solid rgba(255,255,255,0.12);
       padding: 10px 12px;
       border-radius: 999px;
       box-shadow: var(--shadow);
     }
-
-    .pill input{
+    .search span{ opacity: .85; }
+    .search input{
+      width: 100%;
       border: none;
       outline: none;
       background: transparent;
       color: var(--text);
       font-size: 14px;
-      width: 44vw;
-      max-width: 360px;
-      min-width: 170px;
+      min-width: 0;
     }
-
-    .pill button{
-      border: none;
+    .search button{
+      border: 1px solid rgba(46,229,157,0.25);
       background: rgba(46,229,157,0.14);
       color: var(--text);
       padding: 8px 10px;
       border-radius: 999px;
       font-size: 13px;
       cursor: pointer;
-      border: 1px solid rgba(46,229,157,0.25);
-    }
-    .pill button:active{ transform: scale(0.98); }
-
-    main{
-      width: 100%;
-      max-width: var(--max);
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      padding: 4px 0 0;
+      white-space: nowrap;
     }
 
-    @media (min-width: 860px){
-      main{ grid-template-columns: 1.05fr 0.95fr; }
-    }
-
+    /* ----- Cards ----- */
     .card{
       background: var(--card);
       border: 1px solid rgba(255,255,255,0.12);
@@ -125,7 +141,6 @@
       box-shadow: var(--shadow);
       overflow: hidden;
     }
-
     .card .top{
       padding: 14px 14px 10px;
       display:flex;
@@ -135,27 +150,23 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
       background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent);
     }
-
     .card .top h2{
       margin:0;
       font-size: 15px;
       font-weight: 650;
-      letter-spacing: 0.2px;
     }
-    .card .top .count{
+    .pill{
       font-size: 12px;
       color: var(--muted);
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.10);
       padding: 6px 10px;
       border-radius: 999px;
+      white-space: nowrap;
     }
 
-    .list{
-      display:flex;
-      flex-direction: column;
-    }
-
+    /* ----- List rows ----- */
+    .list{ display:flex; flex-direction: column; }
     .row{
       padding: 12px 14px;
       display:flex;
@@ -163,27 +174,21 @@
       gap: 6px;
       border-bottom: 1px solid rgba(255,255,255,0.07);
       cursor: pointer;
-      background: transparent;
       transition: background 120ms ease;
     }
     .row:hover{ background: rgba(255,255,255,0.04); }
     .row:active{ background: rgba(255,255,255,0.06); }
 
-    .row.selected{
-      background: rgba(46,229,157,0.10);
-      outline: 1px solid rgba(46,229,157,0.22);
-    }
-
-    .row .titleline{
+    .titleline{
       display:flex;
-      align-items: flex-start;
+      align-items:flex-start;
       justify-content: space-between;
       gap: 10px;
     }
-    .row .name{
-      font-size: 15px;
-      font-weight: 650;
+    .name{
       margin:0;
+      font-size: 15px;
+      font-weight: 700;
       line-height: 1.15;
     }
     .badge{
@@ -192,10 +197,9 @@
       background: var(--accent);
       padding: 5px 8px;
       border-radius: 999px;
-      font-weight: 650;
+      font-weight: 700;
       white-space: nowrap;
     }
-
     .meta{
       display:flex;
       flex-wrap: wrap;
@@ -209,38 +213,40 @@
       color: rgba(255,255,255,0.35);
     }
 
-    .detail{
+    .empty{
+      padding: 18px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* ----- Detail page ----- */
+    .page{ display:none; }
+    .page.active{ display:block; }
+
+    .hero{
       padding: 14px;
       display:flex;
       flex-direction: column;
-      gap: 12px;
-    }
-
-    .hero{
-      display:flex;
-      flex-direction: column;
       gap: 6px;
-      padding: 12px;
-      border-radius: var(--radius2);
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.10);
     }
-
-    .hero .hname{
+    .hero h2{
       margin:0;
-      font-size: 17px;
-      font-weight: 750;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .2px;
     }
-    .hero .hmeta{
+    .hero p{
       margin:0;
-      font-size: 12px;
       color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
     }
 
     .grid{
       display:grid;
       grid-template-columns: 1fr;
       gap: 10px;
+      padding: 0 14px 14px;
     }
     @media (min-width: 520px){
       .grid{ grid-template-columns: 1fr 1fr; }
@@ -256,26 +262,30 @@
       gap: 4px;
       min-height: 78px;
     }
-
     .k{
       font-size: 11px;
       color: var(--muted);
-      letter-spacing: 0.25px;
       text-transform: uppercase;
+      letter-spacing: 0.25px;
     }
     .v{
       font-size: 14px;
-      font-weight: 650;
+      font-weight: 700;
       word-break: break-word;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-weight: 650;
     }
 
     .actions{
+      padding: 0 14px 14px;
       display:flex;
       gap: 10px;
       flex-wrap: wrap;
     }
     .btn{
-      flex: 1 1 160px;
+      flex: 1 1 150px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
       color: var(--text);
@@ -289,6 +299,7 @@
       align-items:center;
       justify-content:center;
       gap: 8px;
+      white-space: nowrap;
     }
     .btn.primary{
       border-color: rgba(46,229,157,0.25);
@@ -296,21 +307,10 @@
     }
     .btn:active{ transform: scale(0.99); }
 
-    .hint{
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.35;
-    }
-
-    .empty{
-      padding: 18px 14px;
-      color: var(--muted);
-      font-size: 13px;
-    }
     footer{
       width: 100%;
       max-width: var(--max);
-      padding: 2px 6px 0;
+      padding: 2px 2px 0;
       color: rgba(255,255,255,0.45);
       font-size: 11px;
       display:flex;
@@ -318,155 +318,192 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    /* small toast */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.65);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: white;
+      font-size: 13px;
+      z-index: 9999;
+      backdrop-filter: blur(10px);
+      display:none;
+    }
+    .toast.show{ display:block; }
   </style>
 </head>
 
 <body>
   <div class="app">
-    <header>
-      <div class="brand">
-        <h1>Moscheen im Bau</h1>
-        <p>Prototype · mobile-first · offline</p>
-      </div>
+    <div class="shell">
 
-      <div class="pill" role="search">
-        <span aria-hidden="true">🔎</span>
-        <input id="q" type="search" placeholder="Suchen (Stadt / Name) …" autocomplete="off" />
-        <button id="regen" type="button" title="Zufallsdaten neu generieren">Neu</button>
-      </div>
-    </header>
-
-    <main>
-      <!-- LIST -->
-      <section class="card" aria-label="Liste der Moscheen">
-        <div class="top">
-          <h2>Übersicht</h2>
-          <div class="count" id="count">0</div>
+      <!-- LIST PAGE -->
+      <section id="page-list" class="page active" aria-label="Übersicht">
+        <div class="topbar">
+          <div class="brand">
+            <h1>Moscheen im Bau</h1>
+            <p>Übersicht · tippe ein Projekt an</p>
+          </div>
+          <button class="iconbtn" id="regen" type="button" title="Zufallsdaten neu generieren">🔄 Neu</button>
         </div>
-        <div class="list" id="list"></div>
-        <div class="empty" id="empty" style="display:none;">Keine Treffer. 🤷‍♂️</div>
+
+        <div class="search" role="search">
+          <span aria-hidden="true">🔎</span>
+          <input id="q" type="search" placeholder="Suchen (Stadt / Name / Status) …" autocomplete="off" />
+          <button id="clear" type="button">Löschen</button>
+        </div>
+
+        <div class="card">
+          <div class="top">
+            <h2>Projekte</h2>
+            <div class="pill" id="count">0</div>
+          </div>
+          <div class="list" id="list"></div>
+          <div class="empty" id="empty" style="display:none;">Keine Treffer. 🤷‍♂️</div>
+        </div>
       </section>
 
-      <!-- DETAIL -->
-      <section class="card" aria-label="Details">
-        <div class="top">
-          <h2>Details</h2>
-          <div class="count" id="selectedHint">Tippe eine Moschee an</div>
+      <!-- DETAIL PAGE -->
+      <section id="page-detail" class="page" aria-label="Details">
+        <div class="topbar">
+          <button class="iconbtn" id="back" type="button">← Zurück</button>
+          <div style="flex:1"></div>
+          <button class="iconbtn primary" id="share" type="button">🔗 Teilen</button>
         </div>
 
-        <div class="detail" id="detail">
+        <div class="card" id="detailCard">
           <div class="hero">
-            <p class="hname" style="margin:0;">Wähle links eine Moschee aus</p>
-            <p class="hmeta" style="margin:0;">Dann siehst du Kontaktdaten & Kontodaten (Dummy-Daten).</p>
+            <h2 id="d_name">—</h2>
+            <p id="d_meta">—</p>
           </div>
 
-          <p class="hint">
-            Hinweis: Das ist ein reiner Prototype mit Zufallsdaten (keine echten Konten).
-            Später kannst du die Daten aus einer DB / Google Sheet / API laden.
-          </p>
-        </div>
-      </section>
-    </main>
+          <div class="grid">
+            <div class="kv">
+              <div class="k">Kontaktperson</div>
+              <div class="v" id="d_person">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Telefon</div>
+              <div class="v" id="d_phone">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">E-Mail</div>
+              <div class="v" id="d_email">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Adresse</div>
+              <div class="v" id="d_addr">—</div>
+            </div>
 
-    <footer>
-      <span>🔒 Offline Prototype (kein Tracking)</span>
-      <span class="mono" id="build"></span>
-    </footer>
+            <div class="kv">
+              <div class="k">Kontoinhaber</div>
+              <div class="v" id="d_holder">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Bank</div>
+              <div class="v" id="d_bank">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">IBAN</div>
+              <div class="v mono" id="d_iban">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">BIC</div>
+              <div class="v mono" id="d_bic">—</div>
+            </div>
+
+            <div class="kv" style="grid-column: 1 / -1;">
+              <div class="k">Verwendungszweck (Beispiel)</div>
+              <div class="v" id="d_purpose">—</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a class="btn primary" id="callBtn" href="#">📞 Anrufen</a>
+            <a class="btn primary" id="mailBtn" href="#">✉️ E-Mail</a>
+            <button class="btn" id="copyIban" type="button">📋 IBAN kopieren</button>
+            <button class="btn" id="copyAll" type="button">📋 Alles kopieren</button>
+          </div>
+        </div>
+
+        <p style="margin:0; padding: 0 6px; color: var(--muted); font-size: 12px; line-height: 1.35;">
+          Hinweis: Prototype mit Zufallsdaten (keine echten Konten).
+        </p>
+      </section>
+
+      <footer>
+        <span>🔒 Nur Frontend (GitHub Pages)</span>
+        <span id="build"></span>
+      </footer>
+    </div>
   </div>
 
+  <div class="toast" id="toast">✅</div>
+
   <script>
-    // ----------- Helpers (Random / Fake Data) -----------
+    // ----------- Helpers (Fake Data) -----------
     const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
     const pick = (arr) => arr[rand(0, arr.length - 1)];
     const pad2 = (n) => String(n).padStart(2, "0");
 
     function fakePhoneDE(){
-      // +49 15x xxxx xxxx
       const p1 = pick(["151","152","157","159","160","170","171","172","173","174","175","176"]);
-      const mid = rand(1000, 9999);
-      const end = rand(1000, 9999);
-      return `+49 ${p1} ${mid} ${end}`;
+      return `+49 ${p1} ${rand(1000,9999)} ${rand(1000,9999)}`;
     }
-
-    function fakeEmail(name, city){
-      const slug = (s) => s.toLowerCase()
+    function slug(s){
+      return s.toLowerCase()
         .replaceAll("ä","ae").replaceAll("ö","oe").replaceAll("ü","ue").replaceAll("ß","ss")
         .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-      const domains = ["bauverein.org","moscheeprojekt.de","verein-net.de","improjekt.de","spendenkonto.de"];
-      return `kontakt@${slug(name)}-${slug(city)}.${pick(domains).split(".").slice(-2).join(".")}`;
     }
-
+    function fakeEmail(name, city){
+      const dom = pick(["bauverein.org","moscheeprojekt.de","verein-net.de","improjekt.de","spendenkonto.de"]);
+      return `kontakt@${slug(name).slice(0,30)}-${slug(city)}.${dom.split(".").slice(-2).join(".")}`;
+    }
     function fakeIbanDE(){
-      // Not valid-checksum guaranteed; prototype only
       const bank = String(rand(10000000, 99999999));
       const acc  = String(rand(1000000000, 9999999999));
       const chk  = String(rand(10, 99));
       return `DE${chk} ${bank.slice(0,4)} ${bank.slice(4,8)} ${acc.slice(0,4)} ${acc.slice(4,8)} ${acc.slice(8,10)}`;
     }
-
     function fakeBic(){
-      const banks = ["GENODEF1","DEUTDEFF","COBADEFF","PBNKDEFF","BYLADEMM","DRESDEFF","NOLADE21","HELADEFF"];
+      const banks = ["GENODEF1","DEUTDEFF","COBADEFF","PBNKDEFF","BYLADEMM","NOLADE21","HELADEFF"];
       return pick(banks) + pick(["XXX","FRA","BER","HAM","MUC","CGN",""]);
     }
-
-    function pctDone(){
-      return rand(18, 92);
-    }
-
     function euroGoal(){
-      // goal between 450k and 6.5m
-      const goals = [450000, 650000, 900000, 1200000, 1800000, 2500000, 3500000, 4800000, 6500000];
-      return pick(goals);
+      return pick([450000,650000,900000,1200000,1800000,2500000,3500000,4800000,6500000]);
     }
-
     function euroRaised(goal){
-      // 10%..85% of goal
       const ratio = (rand(10, 85) / 100);
       return Math.round(goal * ratio / 1000) * 1000;
     }
-
     function formatEUR(n){
       return new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", maximumFractionDigits:0 }).format(n);
     }
-
     function fakeAddress(city){
       const streets = ["Hauptstraße","Bahnhofstraße","Gartenweg","Friedrichstraße","Taunusstraße","Ringstraße","Schillerstraße","Lindenallee","Bismarckstraße","Goethestraße"];
       return `${pick(streets)} ${rand(3, 88)}, ${rand(10115, 99998)} ${city}`;
     }
-
     function fakeContactPerson(){
       const fn = ["Mehmet","Ahmet","Mustafa","Yusuf","Emre","Murat","Ali","Ömer","İbrahim","Fatih","Serkan"];
       const ln = ["Yılmaz","Kaya","Demir","Çelik","Şahin","Aydın","Koç","Arslan","Polat","Öztürk","Karaca"];
       return `${pick(fn)} ${pick(ln)}`;
     }
-
     function fakeProjectName(city){
       const p1 = ["Yeni","Umut","Selam","Rahmet","Huzur","Nur","Bereket","İkram","Medeniyet","Birlik"];
       const p2 = ["Camii","Moschee","Islamisches Zentrum","Kültür Merkezi","Gemeindezentrum","Zentrum"];
-      // Mix DE/TR naming
       return `${pick(p1)} ${pick(p2)} ${city}`;
     }
-
     function fakeStatus(){
-      const all = ["Rohbau","Innenausbau","Genehmigung","Fundament","Dach","Fassade","Elektrik","Sanitär"];
-      return pick(all);
+      return pick(["Rohbau","Innenausbau","Genehmigung","Fundament","Dach","Fassade","Elektrik","Sanitär"]);
     }
 
-    function fakeBankName(){
-      const banks = [
-        "Volksbank Rhein-Main eG",
-        "Sparkasse Frankfurt",
-        "Commerzbank AG",
-        "Deutsche Bank",
-        "Postbank",
-        "Nassauische Sparkasse",
-        "Helaba (über Hausbank)"
-      ];
-      return pick(banks);
-    }
-
-    function genMosques(n = 10){
+    function genMosques(n = 12){
       const cities = ["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden","Mainz","Aschaffenburg","Gießen","Kassel","Mannheim","Heidelberg","Koblenz"];
       const arr = [];
       for(let i=0;i<n;i++){
@@ -475,15 +512,12 @@
         const goal = euroGoal();
         const raised = euroRaised(goal);
         arr.push({
-          id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + i,
-          name,
-          city,
+          id: (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + i),
+          name, city,
           status: fakeStatus(),
-          progress: pctDone(),
-          goal,
-          raised,
+          progress: rand(18, 92),
+          goal, raised,
           address: fakeAddress(city),
-          website: `https://www.${name.toLowerCase().replace(/[^a-z0-9]+/g,"").slice(0,18)}.org`,
           contact: {
             person: fakeContactPerson(),
             phone: fakePhoneDE(),
@@ -491,7 +525,10 @@
           },
           bank: {
             holder: `${name} e.V.`,
-            bankName: fakeBankName(),
+            bankName: pick([
+              "Volksbank Rhein-Main eG","Sparkasse Frankfurt","Commerzbank AG",
+              "Deutsche Bank","Postbank","Nassauische Sparkasse","Helaba (über Hausbank)"
+            ]),
             iban: fakeIbanDE(),
             bic: fakeBic(),
             purpose: `Spende Moscheebau ${city} ${rand(2026, 2028)}`
@@ -502,30 +539,85 @@
       return arr.sort((a,b)=> a.city.localeCompare(b.city));
     }
 
-    // ----------- App State -----------
+    // ----------- State -----------
     let DATA = genMosques(rand(9, 14));
-    let selectedId = null;
 
     const els = {
+      pageList: document.getElementById("page-list"),
+      pageDetail: document.getElementById("page-detail"),
       q: document.getElementById("q"),
-      regen: document.getElementById("regen"),
       list: document.getElementById("list"),
       count: document.getElementById("count"),
       empty: document.getElementById("empty"),
-      detail: document.getElementById("detail"),
-      selectedHint: document.getElementById("selectedHint"),
+      regen: document.getElementById("regen"),
+      clear: document.getElementById("clear"),
+      back: document.getElementById("back"),
+      share: document.getElementById("share"),
       build: document.getElementById("build"),
+      toast: document.getElementById("toast"),
+
+      d_name: document.getElementById("d_name"),
+      d_meta: document.getElementById("d_meta"),
+      d_person: document.getElementById("d_person"),
+      d_phone: document.getElementById("d_phone"),
+      d_email: document.getElementById("d_email"),
+      d_addr: document.getElementById("d_addr"),
+      d_holder: document.getElementById("d_holder"),
+      d_bank: document.getElementById("d_bank"),
+      d_iban: document.getElementById("d_iban"),
+      d_bic: document.getElementById("d_bic"),
+      d_purpose: document.getElementById("d_purpose"),
+      callBtn: document.getElementById("callBtn"),
+      mailBtn: document.getElementById("mailBtn"),
+      copyIban: document.getElementById("copyIban"),
+      copyAll: document.getElementById("copyAll"),
     };
 
     els.build.textContent = "build " + new Date().toLocaleString("de-DE");
 
+    // ----------- Routing -----------
+    // list:   #/
+    // detail: #/m/<id>
+    function route(){
+      const hash = location.hash || "#/";
+      const m = hash.match(/^#\/m\/(.+)$/);
+      if(m){
+        const id = decodeURIComponent(m[1]);
+        const item = DATA.find(x => x.id === id);
+        if(item){
+          showDetail(item);
+          return;
+        }
+        // fallback
+        location.hash = "#/";
+        return;
+      }
+      showList();
+    }
+
+    function showList(){
+      els.pageDetail.classList.remove("active");
+      els.pageList.classList.add("active");
+      renderList();
+      // scroll restoration on mobile
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function showDetail(item){
+      els.pageList.classList.remove("active");
+      els.pageDetail.classList.add("active");
+      renderDetail(item);
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    // ----------- List rendering -----------
     function filtered(){
       const term = els.q.value.trim().toLowerCase();
       if(!term) return DATA;
-      return DATA.filter(m =>
-        m.name.toLowerCase().includes(term) ||
-        m.city.toLowerCase().includes(term) ||
-        m.status.toLowerCase().includes(term)
+      return DATA.filter(x =>
+        x.name.toLowerCase().includes(term) ||
+        x.city.toLowerCase().includes(term) ||
+        x.status.toLowerCase().includes(term)
       );
     }
 
@@ -535,203 +627,150 @@
       els.list.innerHTML = "";
       els.empty.style.display = items.length ? "none" : "block";
 
-      for(const m of items){
+      for(const x of items){
         const row = document.createElement("div");
-        row.className = "row" + (m.id === selectedId ? " selected" : "");
+        row.className = "row";
         row.tabIndex = 0;
         row.setAttribute("role","button");
-        row.setAttribute("aria-label", `${m.name} auswählen`);
+        row.setAttribute("aria-label", `${x.name} öffnen`);
 
         row.innerHTML = `
           <div class="titleline">
-            <p class="name">${escapeHtml(m.name)}</p>
-            <span class="badge">${m.progress}%</span>
+            <p class="name">${escapeHtml(x.name)}</p>
+            <span class="badge">${x.progress}%</span>
           </div>
           <div class="meta">
-            <span>${escapeHtml(m.city)}</span>
-            <span class="dot">${escapeHtml(m.status)}</span>
-            <span class="dot">Spenden: ${formatEUR(m.raised)} / ${formatEUR(m.goal)}</span>
-            <span class="dot">Update: ${escapeHtml(m.updated)}</span>
+            <span>${escapeHtml(x.city)}</span>
+            <span class="dot">${escapeHtml(x.status)}</span>
+            <span class="dot">Spenden: ${formatEUR(x.raised)} / ${formatEUR(x.goal)}</span>
+            <span class="dot">Update: ${escapeHtml(x.updated)}</span>
           </div>
         `;
 
-        row.addEventListener("click", () => select(m.id));
+        row.addEventListener("click", () => {
+          location.hash = "#/m/" + encodeURIComponent(x.id);
+        });
         row.addEventListener("keydown", (e) => {
-          if(e.key === "Enter" || e.key === " ") { e.preventDefault(); select(m.id); }
+          if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            location.hash = "#/m/" + encodeURIComponent(x.id);
+          }
         });
 
         els.list.appendChild(row);
       }
     }
 
-    function renderDetail(m){
-      els.selectedHint.textContent = "Ausgewählt";
-      els.detail.innerHTML = `
-        <div class="hero">
-          <p class="hname">${escapeHtml(m.name)}</p>
-          <p class="hmeta">
-            ${escapeHtml(m.city)} · ${escapeHtml(m.status)} · Fortschritt ${m.progress}% ·
-            Spenden ${formatEUR(m.raised)} / ${formatEUR(m.goal)}
-          </p>
-        </div>
+    // ----------- Detail rendering -----------
+    function renderDetail(x){
+      els.d_name.textContent = x.name;
+      els.d_meta.textContent =
+        `${x.city} · ${x.status} · Fortschritt ${x.progress}% · Spenden ${formatEUR(x.raised)} / ${formatEUR(x.goal)} · Update: ${x.updated}`;
 
-        <div class="grid">
-          <div class="kv">
-            <div class="k">Kontaktperson</div>
-            <div class="v">${escapeHtml(m.contact.person)}</div>
-          </div>
-          <div class="kv">
-            <div class="k">Telefon</div>
-            <div class="v">${escapeHtml(m.contact.phone)}</div>
-          </div>
-          <div class="kv">
-            <div class="k">E-Mail</div>
-            <div class="v">${escapeHtml(m.contact.email)}</div>
-          </div>
-          <div class="kv">
-            <div class="k">Adresse</div>
-            <div class="v">${escapeHtml(m.address)}</div>
-          </div>
-        </div>
+      els.d_person.textContent = x.contact.person;
+      els.d_phone.textContent = x.contact.phone;
+      els.d_email.textContent = x.contact.email;
+      els.d_addr.textContent = x.address;
 
-        <div class="grid">
-          <div class="kv">
-            <div class="k">Kontoinhaber</div>
-            <div class="v">${escapeHtml(m.bank.holder)}</div>
-          </div>
-          <div class="kv">
-            <div class="k">Bank</div>
-            <div class="v">${escapeHtml(m.bank.bankName)}</div>
-          </div>
-          <div class="kv">
-            <div class="k">IBAN</div>
-            <div class="v mono">${escapeHtml(m.bank.iban)}</div>
-          </div>
-          <div class="kv">
-            <div class="k">BIC</div>
-            <div class="v mono">${escapeHtml(m.bank.bic)}</div>
-          </div>
-          <div class="kv" style="grid-column: 1 / -1;">
-            <div class="k">Verwendungszweck (Beispiel)</div>
-            <div class="v">${escapeHtml(m.bank.purpose)}</div>
-          </div>
-        </div>
+      els.d_holder.textContent = x.bank.holder;
+      els.d_bank.textContent = x.bank.bankName;
+      els.d_iban.textContent = x.bank.iban;
+      els.d_bic.textContent = x.bank.bic;
+      els.d_purpose.textContent = x.bank.purpose;
 
-        <div class="actions">
-          <a class="btn primary" href="tel:${telHref(m.contact.phone)}">📞 Anrufen</a>
-          <a class="btn primary" href="mailto:${encodeURIComponent(m.contact.email)}?subject=${encodeURIComponent("Anfrage: " + m.name)}">✉️ E-Mail</a>
-          <button class="btn" type="button" id="copyIban">📋 IBAN kopieren</button>
-          <button class="btn" type="button" id="copyAll">📋 Alles kopieren</button>
-        </div>
+      els.callBtn.href = "tel:" + telHref(x.contact.phone);
+      els.mailBtn.href = "mailto:" + encodeURIComponent(x.contact.email) + "?subject=" + encodeURIComponent("Anfrage: " + x.name);
 
-        <p class="hint">
-          Tipp: Mit „IBAN kopieren“ kannst du in Banking-Apps/Überweisung direkt einfügen.
-        </p>
-      `;
-
-      // copy buttons
-      document.getElementById("copyIban").addEventListener("click", async () => {
-        await safeCopy(m.bank.iban.replaceAll(" ",""));
+      els.copyIban.onclick = async () => {
+        await safeCopy(x.bank.iban.replaceAll(" ",""));
         toast("IBAN kopiert ✅");
-      });
+      };
 
-      document.getElementById("copyAll").addEventListener("click", async () => {
+      els.copyAll.onclick = async () => {
         const text =
-`Projekt: ${m.name}
-Ort/Status: ${m.city} · ${m.status} · ${m.progress}%
-Kontakt: ${m.contact.person}
-Tel: ${m.contact.phone}
-Mail: ${m.contact.email}
-Adresse: ${m.address}
+`Projekt: ${x.name}
+Ort/Status: ${x.city} · ${x.status} · ${x.progress}%
+Kontakt: ${x.contact.person}
+Tel: ${x.contact.phone}
+Mail: ${x.contact.email}
+Adresse: ${x.address}
 
 Konto:
-Inhaber: ${m.bank.holder}
-Bank: ${m.bank.bankName}
-IBAN: ${m.bank.iban}
-BIC: ${m.bank.bic}
-Verwendungszweck: ${m.bank.purpose}`;
+Inhaber: ${x.bank.holder}
+Bank: ${x.bank.bankName}
+IBAN: ${x.bank.iban}
+BIC: ${x.bank.bic}
+Verwendungszweck: ${x.bank.purpose}`;
         await safeCopy(text);
         toast("Daten kopiert ✅");
-      });
+      };
+
+      els.share.onclick = async () => {
+        const url = location.href;
+        try{
+          if(navigator.share){
+            await navigator.share({ title: x.name, text: "Moschee-Projekt", url });
+          }else{
+            await safeCopy(url);
+            toast("Link kopiert ✅");
+          }
+        }catch{
+          // user cancelled share -> ignore
+        }
+      };
     }
 
-    function select(id){
-      selectedId = id;
-      renderList();
-      const m = DATA.find(x => x.id === id);
-      if(m) renderDetail(m);
-    }
-
-    function resetData(){
-      DATA = genMosques(rand(9, 14));
-      selectedId = null;
-      els.q.value = "";
-      els.selectedHint.textContent = "Tippe eine Moschee an";
-      els.detail.innerHTML = `
-        <div class="hero">
-          <p class="hname" style="margin:0;">Wähle links eine Moschee aus</p>
-          <p class="hmeta" style="margin:0;">Dann siehst du Kontaktdaten & Kontodaten (Dummy-Daten).</p>
-        </div>
-        <p class="hint">Hinweis: Reiner Prototype mit Zufallsdaten.</p>
-      `;
-      renderList();
-    }
-
+    // ----------- Actions -----------
     els.q.addEventListener("input", renderList);
-    els.regen.addEventListener("click", resetData);
+    els.clear.addEventListener("click", () => { els.q.value = ""; renderList(); els.q.focus(); });
 
-    // ----------- Utilities -----------
+    els.regen.addEventListener("click", () => {
+      DATA = genMosques(rand(9, 14));
+      els.q.value = "";
+      location.hash = "#/";
+      toast("Neue Projekte generiert ✅");
+    });
+
+    els.back.addEventListener("click", () => {
+      // If user came from list, browser back works; else go to list
+      if(history.length > 1) history.back();
+      else location.hash = "#/";
+    });
+
+    // ----------- Utils -----------
     function escapeHtml(str){
       return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
-
     function telHref(phone){
       return phone.replaceAll(" ", "").replaceAll("-", "");
     }
-
     async function safeCopy(text){
       try{
         await navigator.clipboard.writeText(text);
       }catch{
-        // fallback for some mobile browsers when file://
         const ta = document.createElement("textarea");
         ta.value = text;
         ta.style.position = "fixed";
         ta.style.left = "-9999px";
         document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
+        ta.focus(); ta.select();
         document.execCommand("copy");
         document.body.removeChild(ta);
       }
     }
-
+    let toastTimer = null;
     function toast(msg){
-      const t = document.createElement("div");
-      t.textContent = msg;
-      t.style.position = "fixed";
-      t.style.left = "50%";
-      t.style.bottom = "18px";
-      t.style.transform = "translateX(-50%)";
-      t.style.padding = "10px 14px";
-      t.style.borderRadius = "999px";
-      t.style.background = "rgba(0,0,0,0.65)";
-      t.style.border = "1px solid rgba(255,255,255,0.18)";
-      t.style.color = "white";
-      t.style.fontSize = "13px";
-      t.style.zIndex = 9999;
-      t.style.backdropFilter = "blur(10px)";
-      document.body.appendChild(t);
-      setTimeout(()=> t.remove(), 1400);
+      clearTimeout(toastTimer);
+      els.toast.textContent = msg;
+      els.toast.classList.add("show");
+      toastTimer = setTimeout(() => els.toast.classList.remove("show"), 1400);
     }
 
     // Init
-    renderList();
+    window.addEventListener("hashchange", route);
+    route();
   </script>
 </body>
 </html>
