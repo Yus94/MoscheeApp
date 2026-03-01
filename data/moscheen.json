@@ -1,0 +1,147 @@
+[
+  {
+    "id": "moschee-1",
+    "name": "Umut Moschee Frankfurt",
+    "city": "Frankfurt am Main",
+    "progress": 58,
+    "contact": "Mustafa Demir",
+    "phone": "+49 170 4839201",
+    "email": "info@umut-ffm.de",
+    "iban": "DE89370400440532013000",
+    "bic": "COBADEFFXXX",
+    "address": "Mainzer Landstraße 112, 60327 Frankfurt am Main",
+    "holder": "Umut Moschee Frankfurt e.V.",
+    "purpose": "Spende Moscheebau Frankfurt"
+  },
+  {
+    "id": "moschee-2",
+    "name": "Rahmet Zentrum Offenbach",
+    "city": "Offenbach am Main",
+    "progress": 72,
+    "contact": "Ahmet Yilmaz",
+    "phone": "+49 160 9123847",
+    "email": "kontakt@rahmet-of.de",
+    "iban": "DE44500105175407324931",
+    "bic": "INGDDEFFXXX",
+    "address": "Berliner Straße 45, 63065 Offenbach",
+    "holder": "Rahmet Zentrum Offenbach e.V.",
+    "purpose": "Spende Moscheebau Offenbach"
+  },
+  {
+    "id": "moschee-3",
+    "name": "Nur Camii Darmstadt",
+    "city": "Darmstadt",
+    "progress": 34,
+    "contact": "Mehmet Kaya",
+    "phone": "+49 171 8392014",
+    "email": "info@nur-darmstadt.de",
+    "iban": "DE12500105170648489890",
+    "bic": "HELADEF1DAS",
+    "address": "Heidelberger Straße 88, 64285 Darmstadt",
+    "holder": "Nur Camii Darmstadt e.V.",
+    "purpose": "Spende Moscheebau Darmstadt"
+  },
+  {
+    "id": "moschee-4",
+    "name": "Selam Gemeinde Hanau",
+    "city": "Hanau",
+    "progress": 81,
+    "contact": "Yusuf Aydin",
+    "phone": "+49 152 3849201",
+    "email": "kontakt@selam-hanau.de",
+    "iban": "DE21500500009876543210",
+    "bic": "DEUTDEFFXXX",
+    "address": "Am Markt 12, 63450 Hanau",
+    "holder": "Selam Gemeinde Hanau e.V.",
+    "purpose": "Spende Moscheebau Hanau"
+  },
+  {
+    "id": "moschee-5",
+    "name": "Huzur Zentrum Wiesbaden",
+    "city": "Wiesbaden",
+    "progress": 49,
+    "contact": "Ali Karaca",
+    "phone": "+49 173 9023847",
+    "email": "info@huzur-wi.de",
+    "iban": "DE75512108001245126199",
+    "bic": "NASPDE55XXX",
+    "address": "Wilhelmstraße 33, 65183 Wiesbaden",
+    "holder": "Huzur Zentrum Wiesbaden e.V.",
+    "purpose": "Spende Moscheebau Wiesbaden"
+  },
+
+  {
+    "id": "moschee-6",
+    "name": "Baraka Moschee Mainz",
+    "city": "Mainz",
+    "progress": 63,
+    "contact": "Ibrahim Sahin",
+    "phone": "+49 162 4938201",
+    "email": "info@baraka-mainz.de",
+    "iban": "DE40500105175407324932",
+    "bic": "INGDDEFFXXX",
+    "address": "Rheinallee 77, 55116 Mainz",
+    "holder": "Baraka Moschee Mainz e.V.",
+    "purpose": "Spende Moscheebau Mainz"
+  },
+
+  {
+    "id": "moschee-7",
+    "name": "Iman Zentrum Kassel",
+    "city": "Kassel",
+    "progress": 27,
+    "contact": "Kemal Aslan",
+    "phone": "+49 176 8293021",
+    "email": "kontakt@iman-kassel.de",
+    "iban": "DE60500105170648489891",
+    "bic": "HELADEF1KAS",
+    "address": "Königsstraße 9, 34117 Kassel",
+    "holder": "Iman Zentrum Kassel e.V.",
+    "purpose": "Spende Moscheebau Kassel"
+  },
+
+  {
+    "id": "moschee-8",
+    "name": "Hidayet Camii Mannheim",
+    "city": "Mannheim",
+    "progress": 76,
+    "contact": "Fatih Demir",
+    "phone": "+49 155 3829012",
+    "email": "info@hidayet-ma.de",
+    "iban": "DE13500105175407324933",
+    "bic": "DEUTDEFFXXX",
+    "address": "Breite Straße 122, 68159 Mannheim",
+    "holder": "Hidayet Camii Mannheim e.V.",
+    "purpose": "Spende Moscheebau Mannheim"
+  },
+
+  {
+    "id": "moschee-9",
+    "name": "Safa Moschee Stuttgart",
+    "city": "Stuttgart",
+    "progress": 69,
+    "contact": "Osman Polat",
+    "phone": "+49 157 4902381",
+    "email": "kontakt@safa-stuttgart.de",
+    "iban": "DE90500105170648489892",
+    "bic": "SOLADES1STG",
+    "address": "Königstraße 44, 70173 Stuttgart",
+    "holder": "Safa Moschee Stuttgart e.V.",
+    "purpose": "Spende Moscheebau Stuttgart"
+  },
+
+  {
+    "id": "moschee-10",
+    "name": "Tawhid Zentrum Köln",
+    "city": "Köln",
+    "progress": 52,
+    "contact": "Bilal Acar",
+    "phone": "+49 163 5820194",
+    "email": "info@tawhid-koeln.de",
+    "iban": "DE28500105175407324934",
+    "bic": "COLSDE33XXX",
+    "address": "Venloer Straße 201, 50823 Köln",
+    "holder": "Tawhid Zentrum Köln e.V.",
+    "purpose": "Spende Moscheebau Köln"
+  }
+]

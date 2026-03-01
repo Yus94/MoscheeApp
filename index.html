@@ -15,7 +15,6 @@
   --muted: rgba(255,255,255,0.60);
   --accent: #2ee59d;
   --radius: 18px;
-  --radius2: 14px;
   --max: 860px;
   --ios-bottom-ui: 96px;
 }
@@ -31,7 +30,6 @@ html,body{
   min-height:100svh;
 }
 
-/* App Layout */
 .app{
   min-height:100svh;
   display:flex;
@@ -59,16 +57,8 @@ html,body{
   align-items:center;
 }
 
-.brand h1{
-  margin:0;
-  font-size:20px;
-}
-
-.brand p{
-  margin:4px 0 0;
-  font-size:13px;
-  color:var(--muted);
-}
+.brand h1{ margin:0; font-size:20px; }
+.brand p{ margin:4px 0 0; font-size:13px; color:var(--muted); }
 
 .iconbtn{
   border:1px solid var(--border);
@@ -80,7 +70,6 @@ html,body{
   cursor:pointer;
 }
 
-/* Search */
 .search{
   display:flex;
   align-items:center;
@@ -101,26 +90,23 @@ html,body{
   font-size:14px;
 }
 
-/* Card */
 .card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:var(--radius);
   overflow:hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
-/* List */
+/* List rows */
 .row{
   padding:16px;
   border-bottom:1px solid var(--border);
   cursor:pointer;
 }
-
 .row:last-child{ border-bottom:none; }
-
-.row:hover{
-  background:rgba(255,255,255,0.04);
-}
+.row:hover{ background:rgba(255,255,255,0.04); }
+.row:active{ transform: scale(0.99); }
 
 .titleline{
   display:flex;
@@ -129,10 +115,7 @@ html,body{
   margin-bottom:6px;
 }
 
-.name{
-  font-weight:600;
-  font-size:15px;
-}
+.name{ font-weight:600; font-size:15px; }
 
 .badge{
   background:var(--accent);
@@ -143,12 +126,9 @@ html,body{
   border-radius:999px;
 }
 
-.meta{
-  font-size:13px;
-  color:var(--muted);
-}
+.meta{ font-size:13px; color:var(--muted); }
 
-/* Detail */
+/* Pages */
 .page{ display:none; }
 .page.active{ display:block; }
 
@@ -156,17 +136,8 @@ html,body{
   padding:20px;
   border-bottom:1px solid var(--border);
 }
-
-.hero h2{
-  margin:0 0 6px;
-  font-size:18px;
-}
-
-.hero p{
-  margin:0;
-  font-size:13px;
-  color:var(--muted);
-}
+.hero h2{ margin:0 0 6px; font-size:18px; }
+.hero p{ margin:0; font-size:13px; color:var(--muted); }
 
 .detail-content{
   padding:20px;
@@ -175,11 +146,17 @@ html,body{
   gap:14px;
 }
 
+.kv{
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.kv:last-child{ border-bottom:none; }
 .kv strong{
   display:block;
   font-size:12px;
   color:var(--muted);
   margin-bottom:4px;
+  letter-spacing: .4px;
 }
 
 .button{
@@ -191,7 +168,10 @@ html,body{
   color:var(--text);
   cursor:pointer;
   font-size:14px;
-  text-decoration: none;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .button.primary{
@@ -207,9 +187,7 @@ html,body{
   flex-wrap:wrap;
 }
 
-#page-detail .iconbtn{
-  margin-bottom: 16px;
-}
+#page-detail .iconbtn{ margin-bottom: 16px; }
 
 .progress{
   height: 8px;
@@ -232,36 +210,29 @@ html,body{
   padding-top: 6px;
   padding-bottom: 10px;
 }
-
-.row:active{ transform: scale(0.99); }
-.card{ box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-
-.kv{ padding: 10px 0; border-bottom: 1px solid var(--border); }
-.kv:last-child{ border-bottom:none; }
-.kv strong{ letter-spacing: .4px; }
-
 </style>
 </head>
 
 <body>
-
 <div class="app">
   <div class="shell">
 
     <!-- LIST -->
-
     <section id="page-list" class="page active">
       <div class="sticky">
-      <div class="topbar">
-        <div class="brand">
-          <h1>Moscheen im Bau</h1>
-          <p>Übersicht der Projekte</p>
+        <div class="topbar">
+          <div class="brand">
+            <h1>Moscheen im Bau</h1>
+            <p>Übersicht der Projekte</p>
+          </div>
         </div>
-      </div>
-      <div class="search">
-        🔎
-        <input id="q" placeholder="Suchen..." />
-      </div>
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <button class="iconbtn" onclick="openRandom()">Zufälliges Projekt</button>
+        </div>
+        <div class="search">
+          🔎
+          <input id="q" placeholder="Suchen..." />
+        </div>
       </div>
       <div class="card" id="list"></div>
     </section>
@@ -282,9 +253,10 @@ html,body{
           <div class="kv"><strong>E-Mail</strong><span id="d_email"></span></div>
           <div class="kv"><strong>Adresse</strong><span id="d_address"></span></div>
           <div class="kv"><strong>IBAN</strong><span id="d_iban"></span></div>
-          <div class="kv"><strong>Kontoinhaber</strong><span id="d_holder"></span></div>          
+          <div class="kv"><strong>Kontoinhaber</strong><span id="d_holder"></span></div>
           <div class="kv"><strong>BIC</strong><span id="d_bic"></span></div>
           <div class="kv"><strong>Verwendungszweck</strong><span id="d_purpose"></span></div>
+
           <div class="kv">
             <strong>Spendenbetrag (€)</strong>
             <input id="don_amount" inputmode="decimal" type="number" min="1" step="0.50" placeholder="z.B. 50" style="
@@ -323,8 +295,8 @@ html,body{
           </div>
 
           <div class="button-row">
-            <a id="callBtn" class="button primary">Anrufen</a>
-            <a id="mailBtn" class="button primary">E-Mail</a>
+            <a id="callBtn" class="button primary" href="#">Anrufen</a>
+            <a id="mailBtn" class="button primary" href="#">E-Mail</a>
             <button class="button" onclick="copyIBAN()">IBAN kopieren</button>
           </div>
         </div>
@@ -334,308 +306,235 @@ html,body{
   </div>
 </div>
 
+<!-- QR Code Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-
 <script>
-function random(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+let data = [];
+let filtered = [];
 
-function padLeft(s, len){
-  s = String(s);
-  while(s.length < len) s = "0" + s;
-  return s;
-}
+const listEl = document.getElementById("list");
+const qEl = document.getElementById("q");
 
-function normalizeIBAN(iban){
-  return String(iban || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-}
-
-function ibanToIntString(iban){
-  const moved = iban.slice(4) + iban.slice(0,4);
-  let out = "";
-  for(const ch of moved){
-    const code = ch.charCodeAt(0);
-    if(code >= 48 && code <= 57) out += ch;       // 0-9
-    else out += String(code - 55);                // A-Z -> 10-35
-  }
-  return out;
-}
-
-function mod97(numStr){
-  let rem = 0;
-  for(let i=0;i<numStr.length;i++){
-    rem = (rem * 10 + (numStr.charCodeAt(i)-48)) % 97;
-  }
-  return rem;
-}
-
-// erzeugt eine DE-IBAN mit korrekter Prüfziffer (Demo!)
-function makeGermanIBAN(){
-  const blz  = padLeft(random(10000000, 99999999), 8);     // 8-stellig
-  const acct = padLeft(random(0, 9999999999), 10);         // 10-stellig
-
-  const base = "DE00" + blz + acct;                        // 00 = Platzhalter
-  const numStr = ibanToIntString(base);
-  const check = 98 - mod97(numStr);
-  const checkStr = padLeft(check, 2);
-
-  return "DE" + checkStr + blz + acct;
-}
-
-const cities=["Frankfurt","Offenbach","Hanau","Darmstadt","Wiesbaden"];
-const names=["Umut Moschee","Rahmet Zentrum","Selam Camii","Nur Gemeinde","Huzur Zentrum"];
-
-const data=Array.from({length:8}).map((_,i)=>({
-  id:i,
-  name:names[random(0,names.length-1)]+" "+cities[random(0,cities.length-1)],
-  city:cities[random(0,cities.length-1)],
-  progress:random(20,90),
-  contact:"Mustafa Kaya",
-  phone:"+49 170 "+random(1000000,9999999),
-  email:"kontakt@moschee.de",
-  iban: makeGermanIBAN(),
-  bic:"GENODEF1XXX",
-  address: "Hauptstraße " + random(3,88) + ", " + random(60311,65936) + " " + cities[random(0,cities.length-1)],
-  holder: "Moscheeprojekt " + cities[random(0,cities.length-1)] + " e.V.",
-  purpose: "Spende Moscheebau " + cities[random(0,cities.length-1)]
-}));
-
+const amountEl = document.getElementById("don_amount");
+const qrBoxEl = document.getElementById("qrBox");
 let currentItem = null;
 
-const list = document.getElementById("list");
-const qInp  = document.getElementById("q");
-
-const d_name    = document.getElementById("d_name");
-const d_meta    = document.getElementById("d_meta");
-const d_contact = document.getElementById("d_contact");
-const d_phone   = document.getElementById("d_phone");
-const d_email   = document.getElementById("d_email");
-const d_address = document.getElementById("d_address");
-const d_iban    = document.getElementById("d_iban");
-const d_holder  = document.getElementById("d_holder");
-const d_bic     = document.getElementById("d_bic");
-const d_purpose = document.getElementById("d_purpose");
-
-const callBtn = document.getElementById("callBtn");
-const mailBtn = document.getElementById("mailBtn");
-
-const donAmount = document.getElementById("don_amount");
-const qrBox = document.getElementById("qrBox");
-const amountHint = document.getElementById("amount_hint");
-
-function normalizePhone(p){
-  // tel: mag oft keine Leerzeichen/Klammern
-  return p.replace(/[^\d+]/g, "");
-}
-
-function normalizeIBAN(iban){
-  return String(iban || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+// ---------- JSON ----------
+async function loadData(){
+  try{
+    const res = await fetch("./data/moscheen.json", { cache: "no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    data = await res.json();
+    filtered = [...data];
+    render();
+  }catch(err){
+    console.error("Konnte moscheen.json nicht laden:", err);
+    listEl.innerHTML = `
+      <div class="row">
+        <div class="name">Daten konnten nicht geladen werden</div>
+        <div class="meta">Prüfe, ob <b>data/moscheen.json</b> existiert und du über einen Server öffnest (Live Server / GitHub Pages).</div>
+      </div>
+    `;
+  }
 }
 
 function render(){
-  const query = (qInp.value || "").trim().toLowerCase();
-  list.innerHTML = "";
+  listEl.innerHTML = "";
 
-  const filtered = data.filter(item => {
-    if(!query) return true;
-    return (
-      item.name.toLowerCase().includes(query) ||
-      item.city.toLowerCase().includes(query) ||
-      item.contact.toLowerCase().includes(query)
-    );
-  });
-
-  filtered.forEach(item=>{
-    const div=document.createElement("div");
-    div.className="row";
-    div.innerHTML=`
-      <div class="titleline">
-        <div class="name">${item.name}</div>
-        <div class="badge">${item.progress}%</div>
+  if(!filtered.length){
+    listEl.innerHTML = `
+      <div class="row">
+        <div class="name">Keine Treffer</div>
+        <div class="meta">Passe die Suche an.</div>
       </div>
-      <div class="meta">${item.city}</div>
-      <div class="progress"><div style="width:${item.progress}%"></div></div>
     `;
-    div.onclick=()=>showDetail(item);
-    list.appendChild(div);
-  });
-
-  if(filtered.length === 0){
-    const empty = document.createElement("div");
-    empty.className = "row";
-    empty.style.cursor = "default";
-    empty.innerHTML = `<div class="meta">Keine Treffer.</div>`;
-    list.appendChild(empty);
+    return;
   }
+
+  filtered.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div class="titleline">
+        <div class="name">${escapeHtml(item.name)}</div>
+        <div class="badge">${Number(item.progress ?? 0)}%</div>
+      </div>
+      <div class="meta">${escapeHtml(item.city ?? "")}</div>
+      <div class="progress"><div style="width:${Number(item.progress ?? 0)}%"></div></div>
+    `;
+    row.onclick = () => showDetail(item);
+    listEl.appendChild(row);
+  });
 }
 
 function showDetail(item){
   document.getElementById("page-list").classList.remove("active");
   document.getElementById("page-detail").classList.add("active");
 
-  d_name.textContent    = item.name;
-  d_meta.textContent    = item.city + " • Fortschritt " + item.progress + "%";
-  d_contact.textContent = item.contact;
-  d_phone.textContent   = item.phone;
-  d_email.textContent   = item.email;
-  d_address.textContent = item.address;
-  d_holder.textContent  = item.holder;
-  d_iban.textContent    = item.iban;
-  d_bic.textContent     = item.bic;
-  d_purpose.textContent = item.purpose;
+  // (IDs als Variablen sind nicht zuverlässig -> immer getElementById)
+  document.getElementById("d_name").textContent = item.name ?? "";
+  document.getElementById("d_meta").textContent = (item.city ?? "") + " • Fortschritt " + Number(item.progress ?? 0) + "%";
 
-  const tel = normalizePhone(item.phone);
-  callBtn.href = "tel:" + tel;
+  document.getElementById("d_contact").textContent = item.contact ?? "";
+  document.getElementById("d_phone").textContent   = item.phone ?? "";
+  document.getElementById("d_email").textContent   = item.email ?? "";
+  document.getElementById("d_address").textContent = item.address ?? "";
+  document.getElementById("d_iban").textContent    = item.iban ?? "";
+  document.getElementById("d_holder").textContent  = item.holder ?? "";
+  document.getElementById("d_bic").textContent     = item.bic ?? "";
+  document.getElementById("d_purpose").textContent = item.purpose ?? "";
 
-  // mailto inkl. Betreff + Body (optional)
-  const subject = encodeURIComponent("Spende für " + item.name);
-  const body = encodeURIComponent(
-    "Selamün aleyküm,\n\nich möchte für euer Bauprojekt spenden.\nKönnt ihr mir kurz bestätigen:\n- Kontoinhaber: " + item.holder + "\n- Verwendungszweck: " + item.purpose + "\n\nDanke!\n"
-  );
-  mailBtn.href = `mailto:${item.email}?subject=${subject}&body=${body}`;
+  document.getElementById("callBtn").href = item.phone ? ("tel:" + item.phone) : "#";
+  document.getElementById("mailBtn").href = item.email
+    ? ("mailto:" + item.email + "?subject=" + encodeURIComponent("Anfrage: " + (item.name ?? "Moscheeprojekt")))
+    : "#";
 
+  // QR Kontext
   currentItem = item;
-
-  // Betrag pro Projekt “merken”
-  donAmount.value = item._amount ?? "";
-
-  // QR initial (nur wenn Betrag vorhanden)
-  updateQRFromInput();
-  }
+  if(amountEl) amountEl.value = "";
+  if(qrBoxEl) qrBoxEl.innerHTML = "";
+}
 
 function goBack(){
   document.getElementById("page-detail").classList.remove("active");
   document.getElementById("page-list").classList.add("active");
 }
 
+// ---------- Toast ----------
 function toast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg;
   t.style.display = "block";
   clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(() => {
-    t.style.display = "none";
-  }, 1200);
+  window.__toastTimer = setTimeout(() => (t.style.display = "none"), 1200);
 }
 
 function copyIBAN(){
-  // iOS Safari kann clipboard manchmal blocken -> fallback
-  const text = d_iban.textContent;
+  const text = (document.getElementById("d_iban").textContent || "").trim();
+  if(!text){ toast("Keine IBAN vorhanden"); return; }
 
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(text).then(() => toast("IBAN kopiert ✅"))
-    .catch(() => fallbackCopy(text));
-  } else {
-    fallbackCopy(text);
-  }
-}
-
-function fallbackCopy(text){
-  const ta = document.createElement("textarea");
-  ta.value = text;
-  ta.style.position = "fixed";
-  ta.style.left = "-9999px";
-  document.body.appendChild(ta);
-  ta.focus();
-  ta.select();
-  try {
-    document.execCommand("copy");
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
     toast("IBAN kopiert ✅");
-  } catch(e){
-    toast("Kopieren nicht möglich ❌");
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    toast("IBAN kopiert ✅");
   }
-  document.body.removeChild(ta);
 }
 
-function parseAmountEUR(raw){
-  if(raw == null) return null;
-  const s = String(raw).trim().replace(",", ".");
-  if(!s) return null;
-  const x = Number(s);
-  if(!Number.isFinite(x) || x <= 0) return null;
-  // EPC mag 2 Dezimalstellen
-  return Math.round(x * 100) / 100;
+// ---------- QR (EPC / SEPA) ----------
+function sanitizeIban(iban){ return String(iban || "").replace(/\s+/g, "").toUpperCase(); }
+function sanitizeBic(bic){ return String(bic || "").replace(/\s+/g, "").toUpperCase(); }
+
+function formatAmountEUR(val){
+  const num = Number(String(val).replace(",", "."));
+  if(!isFinite(num) || num <= 0) return "";
+  return num.toFixed(2);
 }
 
-/**
- * EPC QR (SEPA Credit Transfer) payload
- * Spec: "BCD" + version + SCT + BIC + Name + IBAN + Amount + ... + Remittance
- */
-function buildEPCPayload(item, amount){
-  const iban = normalizeIBAN(item.iban);
-  const bic  = String(item.bic || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-  const name = String(item.holder || "").trim();
-  const rem  = String(item.purpose || "").trim();
-
-  // Betrag als EUR12.34
-  const amt = "EUR" + amount.toFixed(2);
-
-  // EPC QR (GiroCode / EPC069-12)
-  // Felder müssen exakt in dieser Reihenfolge + Zeilenumbrüche
+function buildEpcPayload({bic, name, iban, amountEUR, purpose}){
   return [
-    "BCD",    // Service Tag
-    "001",    // Version (001 ist am kompatibelsten)
-    "1",      // Character set: 1 = UTF-8
-    "SCT",    // SEPA Credit Transfer
-    bic,      // BIC (optional – wenn leer, lassen)
-    name,     // Empfänger
-    iban,     // IBAN (OHNE Leerzeichen)
-    amt,      // Amount
-    "",       // Purpose of the credit transfer (4-stelliger Code, meistens leer)
-    rem,      // Remittance information (unstructured)
-    ""        // Information to beneficiary (optional)
+    "BCD",
+    "001",
+    "1",
+    "SCT",
+    bic || "",
+    name || "",
+    iban || "",
+    amountEUR ? ("EUR" + amountEUR) : "",
+    "",
+    purpose || "",
+    ""
   ].join("\n");
 }
 
-function renderQR(text){
+function renderQr(payload){
+  if(!qrBoxEl) return;
+
+  qrBoxEl.innerHTML = "";
+
   if(typeof QRCode === "undefined"){
-    toast("QR-Library nicht geladen ❌");
+    qrBoxEl.innerHTML = `<div style="color:#111; font-size:12px; text-align:center; padding:10px;">
+      QR-Library nicht geladen
+    </div>`;
     return;
   }
 
-  // Container leeren
-  qrBox.innerHTML = "";
-
-  // QR erzeugen (qrcodejs rendert ein Canvas im Container)
-  new QRCode(qrBox, {
-    text: text,
+  new QRCode(qrBoxEl, {
+    text: payload,
     width: 200,
     height: 200,
     correctLevel: QRCode.CorrectLevel.M
   });
 }
 
-function updateQRFromInput(){
+function updateQr(){
   if(!currentItem) return;
 
-  const amount = parseAmountEUR(donAmount.value);
-  if(!amount){
-    amountHint.textContent = "Betrag eingeben → QR-Code wird erstellt (SEPA-Überweisung).";
-    // Optional: leeren QR anzeigen
-    renderQR("Betrag fehlt");
+  const amountEUR = formatAmountEUR(amountEl?.value);
+  if(!amountEUR){
+    if(qrBoxEl) qrBoxEl.innerHTML = "";
     return;
   }
 
-  // speichern
-  currentItem._amount = amount;
+  const payload = buildEpcPayload({
+    bic: sanitizeBic(currentItem.bic),
+    name: String(currentItem.holder || currentItem.name || "").trim(),
+    iban: sanitizeIban(currentItem.iban),
+    amountEUR,
+    purpose: String(currentItem.purpose || "").trim()
+  });
 
-  const payload = buildEPCPayload(currentItem, amount);
-  amountHint.textContent = "QR-Code bereit: " + amount.toFixed(2) + " €";
-  const ibanClean = normalizeIBAN(currentItem.iban);
-  if(ibanClean.length < 15){ // grob: DE hat 22
-    toast("IBAN ungültig – QR wird nicht erstellt ❌");
-  return;
-}
-  renderQR(payload);
+  renderQr(payload);
 }
 
-// live
-donAmount.addEventListener("input", updateQRFromInput);
+amountEl?.addEventListener("input", updateQr);
 
-// live search
-qInp.addEventListener("input", render);
+// ---------- Utils ----------
+function escapeHtml(str){
+  return String(str ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
-render();
+// Suche
+qEl?.addEventListener("input", () => {
+  const s = qEl.value.trim().toLowerCase();
+  filtered = data.filter(x =>
+    (x.name ?? "").toLowerCase().includes(s) ||
+    (x.city ?? "").toLowerCase().includes(s) ||
+    (x.holder ?? "").toLowerCase().includes(s)
+  );
+  render();
+});
+
+// Start
+loadData();
+
+function openRandom(){
+  const pool = (filtered && filtered.length) ? filtered : data;
+
+  if(!pool || pool.length === 0){
+    toast("Keine Projekte verfügbar");
+    return;
+  }
+
+  const idx = Math.floor(Math.random() * pool.length);
+  showDetail(pool[idx]);
+  toast("Zufälliges Projekt geöffnet 🎲");
+}
 </script>
 
 <div id="toast" style="
