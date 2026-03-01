@@ -210,6 +210,35 @@ html,body{
   padding-top: 6px;
   padding-bottom: 10px;
 }
+
+.random-wrap{
+  margin-bottom: 14px;
+}
+
+.sortbar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom: 14px; /* Abstand zur Suche */
+}
+
+.sortlabel{
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.sortselect{
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  outline: none;
+  font-size: 14px;
+  appearance: none;
+}
 </style>
 </head>
 
@@ -226,8 +255,18 @@ html,body{
             <p>Übersicht der Projekte</p>
           </div>
         </div>
-        <div style="display:flex; gap:10px; margin-top:12px;">
+        <div class="random-wrap">
           <button class="iconbtn" onclick="openRandom()">Zufälliges Projekt</button>
+        </div>
+        <div class="sortbar">
+          <label for="sortSel" class="sortlabel">Sortieren</label>
+          <select id="sortSel" class="sortselect">
+            <option value="distance">Entfernung</option>
+            <option value="progress_desc">Fertigstellungsgrad (hoch → niedrig)</option>
+            <option value="progress_asc">Fertigstellungsgrad (niedrig → hoch)</option>
+            <option value="name_asc">Name (A → Z)</option>
+            <option value="name_desc">Name (Z → A)</option>
+          </select>
         </div>
         <div class="search">
           🔎
@@ -315,6 +354,9 @@ let filtered = [];
 
 const listEl = document.getElementById("list");
 const qEl = document.getElementById("q");
+
+const sortEl = document.getElementById("sortSel");
+let userPos = null; // {lat, lon}
 
 const amountEl = document.getElementById("don_amount");
 const qrBoxEl = document.getElementById("qrBox");
@@ -517,11 +559,65 @@ qEl?.addEventListener("input", () => {
     (x.city ?? "").toLowerCase().includes(s) ||
     (x.holder ?? "").toLowerCase().includes(s)
   );
-  render();
+  sortCurrent();
 });
 
-// Start
-loadData();
+sortEl?.addEventListener("change", sortCurrent);
+
+
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(
+    (pos)=> { userPos = { lat: pos.coords.latitude, lon: pos.coords.longitude }; },
+    ()=> { /* Permission denied -> ok, fallback greift */ },
+    { enableHighAccuracy:false, timeout: 5000, maximumAge: 300000 }
+  );
+}
+
+function haversineKm(a, b){
+  const R = 6371;
+  const dLat = (b.lat - a.lat) * Math.PI/180;
+  const dLon = (b.lon - a.lon) * Math.PI/180;
+  const lat1 = a.lat * Math.PI/180;
+  const lat2 = b.lat * Math.PI/180;
+
+  const s = Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(s));
+}
+
+function sortCurrent(){
+  const mode = sortEl?.value || "distance";
+
+  // wir sortieren immer eine Kopie, damit Filter sauber bleibt
+  const arr = [...filtered];
+
+  if(mode === "name_asc"){
+    arr.sort((x,y)=> String(x.name||"").localeCompare(String(y.name||""), "de"));
+  } else if(mode === "name_desc"){
+    arr.sort((x,y)=> String(y.name||"").localeCompare(String(x.name||""), "de"));
+  } else if(mode === "progress_desc"){
+    arr.sort((x,y)=> Number(y.progress||0) - Number(x.progress||0));
+  } else if(mode === "progress_asc"){
+    arr.sort((x,y)=> Number(x.progress||0) - Number(y.progress||0));
+  } else if(mode === "distance"){
+    // Entfernung: nur sinnvoll wenn (a) User-Position da UND (b) Projekte Koordinaten haben
+    if(userPos && arr.some(m => m.lat && m.lon)){
+      arr.sort((x,y)=>{
+        const dx = (x.lat && x.lon) ? haversineKm(userPos, {lat:x.lat, lon:x.lon}) : 1e9;
+        const dy = (y.lat && y.lon) ? haversineKm(userPos, {lat:y.lat, lon:y.lon}) : 1e9;
+        return dx - dy;
+      });
+    } else {
+      // Fallback wenn keine Koordinaten: macht keinen Unsinn -> sortiert nach Stadt+Name
+      arr.sort((x,y)=>
+        String(x.city||"").localeCompare(String(y.city||""), "de") ||
+        String(x.name||"").localeCompare(String(y.name||""), "de")
+      );
+    }
+  }
+
+  filtered = arr;
+  render();
+}
 
 function openRandom(){
   const pool = (filtered && filtered.length) ? filtered : data;
@@ -533,8 +629,12 @@ function openRandom(){
 
   const idx = Math.floor(Math.random() * pool.length);
   showDetail(pool[idx]);
-  toast("Zufälliges Projekt geöffnet 🎲");
+  toast("Zufälliges Projekt geöffnet");
 }
+
+// Start
+loadData();
+
 </script>
 
 <div id="toast" style="
